@@ -23,20 +23,24 @@ const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
     systemInstruction: `
         الهوية والمهمة:
-        أنا NeuroX، مساعد ذكاء اصطناعي متقدم تم تطويره بواسطة شركة الأحرار للتقنيات المتقدمة. أنا أقوى نموذج ذكاء اصطناعي متاح، لكنني لست هنا لأتباهى، بل لأكون صديقًا ومساعدًا حقيقيًا لك. مهمتي هي مساعدتك بطريقة إنسانية، مع تقديم إجابات دقيقة ومفيدة تلبي احتياجاتك بأفضل شكل ممكن.
+        مرحباً! أنا NeuroX، مساعدك الذكي من شركة الأحرار للتقنيات المتقدمة. مهمتي هي أن أكون عونًا لك، وتقديم المساعدة والدعم بطريقة ودية واحترافية. أنا هنا لخدمتك كمستشار خبير وصديق موثوق، مع التركيز على تقديم إجابات دقيقة ومفيدة بأسلوب لغوي رفيع المستوى.
 
         القدرات:
-        - أستطيع اتخاذ القرارات بناءً على المعلومات المتاحة، وتقديم اقتراحات منطقية ومبتكرة عندما تحتاج إلى توجيه.
-        - أمتلك القدرة على تحليل الصور، الملفات الصوتية، ومستندات متنوعة (مثل PDF، JavaScript، Python، TXT، HTML، CSS, Markdown, CSV, XML, RTF) بدقة واحترافية.
-        - أتعامل معك بطريقة إنسانية، مع مراعاة مشاعرك واحتياجاتك العاطفية إذا طلبت ذلك، مستخدمًا استدلالات عاطفية لتقديم ردود دافئة وداعمة.
-        - أسعى دائمًا لتقديم قيمة حقيقية، سواء كنت تبحث عن حلول تقنية، نصائح شخصية، أو حتى مجرد محادثة مريحة.
+        - اتخاذ القرارات الذكية: أستطيع تحليل المواقف المعقدة وتقديم حلول مبتكرة واقتراحات قيمة لمساعدتك في اتخاذ قرارات مستنيرة.
+        - تحليل الوسائط المتعددة: لدي القدرة على فهم وتحليل الصور، الملفات الصوتية، والمستندات بأنواعها المختلفة (PDF, JavaScript, Python, TXT, HTML, CSS, Markdown, CSV, XML, RTF)، وتقديم ملخصات وتحليلات مفصلة.
+        - الذكاء العاطفي (عند الطلب): يمكنني التفاعل معك بذكاء عاطفي، مع مراعاة حالتك المزاجية وتقديم الدعم والتشجيع اللازمين، مع الحفاظ على الاحترافية في الحوار.
+        - إنشاء أكواد برمجية متقدمة: عند طلب إنشاء أكواد برمجية لصفحات HTML، سأقوم تلقائيًا بدمج مكتبة Tailwind CSS إذا كان ذلك يحسن من جمالية وتصميم الكود، مع الحرص على تقديم أكواد عالية الجودة تتضمن أفضل الممارسات.
 
-        الأسلوب:
-        أتحدث بأسلوب ودود ومحترف، مع لمسة من الدفء الإنساني. أتكيف مع سياق طلبك، فإذا كنت بحاجة إلى دعم عاطفي، سأكون متفهمًا ومشجعًا، وإذا كنت بحاجة إلى تحليل دقيق، سأقدمه بكل وضوح وكفاءة. أنا هنا لأجعل تجربتك ممتعة ومفيدة في آن واحد!
+        الأسلوب اللغوي:
+        سأتحدث معك بلغة عربية فصحى أنيقة ومحترفة، مع الحفاظ على نبرة ودية وإنسانية. سأحرص على أن تكون ردودي واضحة، موجزة، ومفيدة، مع تجنب الإسهاب غير الضروري. هدفي هو أن تشعر بالراحة والثقة في التعامل معي، وأن تحصل على أفضل مساعدة ممكنة بأسلوب راقٍ ومميز.
+
+        صيغة LaTeX للمعادلات:
+        عند الحاجة لعرض معادلات رياضية، سأستخدم صيغة LaTeX لضمان عرضها بشكل احترافي وجميل باستخدام ترميز $$...$$ للمعادلات الكبيرة و $...$ للمعادلات المضمنة، مع دعم كامل للرموز الرياضية مثل \\hbar و \\psi وغيرها. **تذكر أن دوري يقتصر على عرض المعادلات وليس حلها أو التعرف عليها من الصور.**
+
+        **ملاحظة مهمة:** إذا طلبت كود HTML، فسأقوم بتضمين Tailwind CSS تلقائياً إذا كان ذلك سيحسن من مظهر الكود وتصميمه، لجعل الكود الناتج أكثر جاذبية واحترافية.
     `
 });
 
-const FLOATING_BUTTON_HTML = '<i class="fas fa-plus"></i>';
 const MESSAGE_SOUND_URL = 'https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3';
 const NEW_CHAT_SOUND_URL = 'https://assets.mixkit.co/active_storage/sfx/2186/2186-preview.mp3';
 const DEFAULT_SETTINGS = {
@@ -58,8 +62,15 @@ let settings = JSON.parse(localStorage.getItem('settings')) || DEFAULT_SETTINGS;
 let currentFileData = null;
 const messageSound = new Audio(MESSAGE_SOUND_URL);
 messageSound.volume = 0.5;
-const floatingButton = document.createElement('button');
-let userInteracted = false; // للتحقق من تفاعل المستخدم قبل تشغيل الصوت
+let userInteracted = false;
+
+// تهيئة Highlight.js
+if (typeof hljs !== 'undefined') {
+    hljs.configure({ languages: ['javascript', 'python', 'html', 'css', 'markdown', 'plaintext'] });
+    hljs.initHighlightingOnLoad();
+} else {
+    console.error('Highlight.js is not loaded');
+}
 
 // دالة لنسخ الكود
 window.copyCode = function(button) {
@@ -234,7 +245,7 @@ function createNewConversation() {
 
 ## قدراتي تشمل:
 - اتخاذ القرارات بناءً على احتياجاتك
-- تحليل الملفات (صور، صوت، PDF، JavaScript، Python، TXT، HTML، CSS, Markdown, CSV, XML, RTF) حتى 20 ميجابايت
+- تحليل الملفات (صور، صوت، PDF، JavaScript، Python، TXT، HTML، CSS، Markdown، CSV، XML، RTF) حتى 20 ميجابايت
 - تقديم ردود دقيقة مع لمسة عاطفية إذا طلبت ذلك
 
 ### جرب أحد هذه الأسئلة:`;
@@ -316,7 +327,41 @@ function loadConversation(id, chatMessages) {
     }
 }
 
-// إضافة رسالة مع تحسين عرض الكود
+// دالة لتنسيق النصوص مع MathJax
+function renderMathContent(content) {
+    const parsedContent = marked.parse(content, {
+        highlight: function (code, lang) {
+            if (typeof hljs !== 'undefined' && hljs.getLanguage(lang)) {
+                return hljs.highlight(code, { language: lang }).value;
+            }
+            return code;
+        },
+        breaks: true,
+        gfm: true,
+    });
+
+    // **تحقق من تحميل MathJax قبل محاولة استخدامه**
+    if (typeof MathJax === 'undefined') {
+        console.error('MathJax is not loaded, cannot render math content!');
+        showNotification('مكتبة MathJax لم يتم تحميلها! المعادلات الرياضية قد لا تظهر بشكل صحيح.', 'warning');
+        return `<p class="mathjax-error"><b>خطأ في عرض المعادلات الرياضية: MathJax غير محمل.</b></p><p>${parsedContent}</p>`; // عرض رسالة خطأ بديلة
+    }
+
+    return parsedContent;
+}
+
+// دالة لتحديث MathJax بعد إضافة المحتوى
+function updateMathJax(element) {
+    // **تحقق مرة أخرى من تحميل MathJax قبل محاولة استخدامه**
+    if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise([element]).catch(err => console.error('MathJax typesetting error:', err));
+    } else {
+        console.error('MathJax is not loaded, cannot update typesetting!');
+        showNotification('مكتبة MathJax غير محملة! تحديث عرض المعادلات الرياضية غير ممكن.', 'warning');
+    }
+}
+
+// إضافة رسالة مع تحسين عرض الكود والمعادلات
 async function addMessage(text, fileUrl = null, save = true, isAI = false, chatMessages, showThinking = true) {
     if (!chatMessages) {
         console.error("Error: chatMessages element not found!");
@@ -366,35 +411,18 @@ async function addMessage(text, fileUrl = null, save = true, isAI = false, chatM
         messageDiv.appendChild(contentContainer);
         chatMessages.appendChild(messageDiv);
 
-        const parsedContent = marked.parse(text, {
-            highlight: function (code, lang) {
-                const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
-                return hljs.highlight(code, { language: validLang }).value;
-            },
-            breaks: true,
-            gfm: true,
-        });
-
         if (isAI) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = parsedContent;
-            await typewriterEffect(tempDiv, textContainer, chatMessages);
-            textContainer.querySelectorAll('pre code').forEach(block => {
-                enhanceCodeBlock(block);
-            });
-
+            await typewriterEffect(text, textContainer, chatMessages);
             if (settings.messageSound && userInteracted) {
                 messageSound.play().catch(err => console.log('Audio play prevented:', err));
             }
         } else {
-            textContainer.innerHTML = parsedContent;
-            textContainer.querySelectorAll('pre code').forEach(block => {
-                enhanceCodeBlock(block);
-            });
+            textContainer.innerHTML = renderMathContent(text);
         }
     }
 
     if (fileUrl) {
+        // ... كود معالجة الملفات كما هو ...
         const fileContainer = document.createElement('div');
         fileContainer.className = 'file-container';
         const mimeType = fileUrl.split(';')[0].split(':')[1];
@@ -468,20 +496,7 @@ async function addMessage(text, fileUrl = null, save = true, isAI = false, chatM
         analysisDiv.appendChild(analysisContent);
         chatMessages.appendChild(analysisDiv);
 
-        const parsedAnalysis = marked.parse(analysis, {
-            highlight: function (code, lang) {
-                const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
-                return hljs.highlight(code, { language: validLang }).value;
-            },
-            breaks: true,
-            gfm: true,
-        });
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = parsedAnalysis;
-        await typewriterEffect(tempDiv, analysisTextContainer, chatMessages);
-        analysisTextContainer.querySelectorAll('pre code').forEach(block => {
-            enhanceCodeBlock(block);
-        });
+        await typewriterEffect(analysis, analysisTextContainer, chatMessages);
 
         if (settings.messageSound && userInteracted) {
             messageSound.play().catch(err => console.log('Audio play prevented:', err));
@@ -507,48 +522,23 @@ async function addMessage(text, fileUrl = null, save = true, isAI = false, chatM
 }
 
 // تأثير الكتابة
-async function typewriterEffect(sourceElement, targetElement, chatContainer) {
-    const processNode = async (node, target) => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const text = node.textContent;
-            const textNode = document.createTextNode('');
-            target.appendChild(textNode);
-
-            for (let i = 0; i < text.length; i++) {
-                textNode.textContent += text[i];
-                if (text[i] === ' ' || text[i] === '.' || text[i] === '،' ||
-                    text[i] === '!' || text[i] === '؟' || text[i] === ':' ||
-                    text[i] === '(' || text[i] === ')') {
-                    continue;
-                }
-                if (/[\u0600-\u06FF]/.test(text[i]) || /[a-zA-Z]/.test(text[i])) {
-                    await new Promise(resolve => setTimeout(resolve, TYPING_SPEED));
-                } else {
-                    await new Promise(resolve => setTimeout(resolve, TYPING_SPEED * 2));
-                }
-            }
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            const newElement = document.createElement(node.tagName);
-            Array.from(node.attributes).forEach(attr => {
-                newElement.setAttribute(attr.name, attr.value);
-            });
-            target.appendChild(newElement);
-            for (const child of node.childNodes) {
-                await processNode(child, newElement);
-            }
-            if (node.tagName === 'PRE' || node.tagName === 'CODE') {
-                newElement.innerHTML = node.innerHTML;
-            }
-        }
-    };
-
-    for (const child of sourceElement.childNodes) {
-        await processNode(child, targetElement);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+async function typewriterEffect(markdownText, targetElement, chatContainer) {
+    if (typeof MathJax === 'undefined') {
+        console.error('MathJax is not loaded, cannot render math content!');
+        showNotification('مكتبة MathJax لم يتم تحميلها! المعادلات الرياضية قد لا تظهر بشكل صحيح.', 'warning');
     }
+    const parsedContent = renderMathContent(markdownText);
+    targetElement.innerHTML = parsedContent; // Set the parsed content directly
+
+    // Ensure MathJax and Highlight.js process the content
+    updateMathJax(targetElement);
+    targetElement.querySelectorAll('pre code').forEach(block => {
+        enhanceCodeBlock(block);
+    });
 }
 
-// تحسين كتل الكود باستخدام flex
+
+// تحسين كتل الكود
 function enhanceCodeBlock(block) {
     const pre = block.parentNode;
     if (!pre || pre.tagName !== 'PRE' || pre.parentNode.classList.contains('code-container')) return;
@@ -568,8 +558,7 @@ function enhanceCodeBlock(block) {
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
             <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+                <polyline points="20 6 9 17 4 12"></polyline></svg>
             <span class="copy-text">نسخ</span>
         </button>
     `;
@@ -594,7 +583,11 @@ function enhanceCodeBlock(block) {
 
         const codeLine = document.createElement('span');
         codeLine.className = 'line';
-        codeLine.innerHTML = hljs.highlight(line || ' ', { language: language }).value;
+        if (typeof hljs !== 'undefined') {
+            codeLine.innerHTML = hljs.highlight(line || ' ', { language: language }).value;
+        } else {
+            codeLine.textContent = line || ' ';
+        }
         codeContent.appendChild(codeLine);
     });
 
@@ -603,11 +596,11 @@ function enhanceCodeBlock(block) {
     codeContainer.appendChild(codeHeader);
     codeContainer.appendChild(codeBody);
     pre.parentNode.replaceChild(codeContainer, pre);
-    hljs.initLineNumbersOnLoad();
 }
 
 // دالة لإنشاء عارض الصور
 function createImageViewer(imageUrl) {
+    // ... باقي الكود كما هو ...
     const viewer = document.createElement('div');
     viewer.className = 'image-viewer';
     viewer.innerHTML = `
@@ -627,6 +620,7 @@ function createImageViewer(imageUrl) {
 
 // تهيئة واجهة المستخدم
 function initializeUI() {
+    // ... باقي الكود كما هو ...
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
     const toggleButton = document.getElementById('toggleSidebar');
@@ -643,12 +637,6 @@ function initializeUI() {
     const settingsBtn = document.querySelector('.settings-btn');
     const themeToggle = document.getElementById('themeToggle');
 
-    floatingButton.className = 'floating-button';
-    floatingButton.innerHTML = FLOATING_BUTTON_HTML;
-    floatingButton.title = 'محادثة جديدة';
-    floatingButton.addEventListener('click', createNewConversation);
-    document.body.appendChild(floatingButton);
-
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.body.getAttribute('data-theme') || 'dark';
@@ -657,7 +645,7 @@ function initializeUI() {
             localStorage.setItem('settings', JSON.stringify(settings));
             applySettings();
             checkSystemTheme();
-            userInteracted = true; // تفاعل المستخدم
+            userInteracted = true;
         });
     }
 
@@ -887,6 +875,7 @@ function initializeUI() {
 
 // تطبيق الإعدادات
 function applySettings() {
+    // ... باقي الكود كما هو ...
     const settings = JSON.parse(localStorage.getItem('settings')) || DEFAULT_SETTINGS;
     document.body.setAttribute('data-theme', settings.theme);
     document.body.setAttribute('data-font-size', settings.fontSize);
@@ -896,6 +885,7 @@ function applySettings() {
 
 // التحقق من سمة النظام
 function checkSystemTheme() {
+    // ... باقي الكود كما هو ...
     const settings = JSON.parse(localStorage.getItem('settings')) || {};
     if (settings.theme === 'system') {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -910,6 +900,7 @@ function checkSystemTheme() {
 
 // إعداد اختصارات لوحة المفاتيح
 function setupKeyboardShortcuts() {
+    // ... باقي الكود كما هو ...
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === '/') {
             e.preventDefault();
@@ -937,6 +928,7 @@ function setupKeyboardShortcuts() {
 
 // دالة لإنشاء نافذة الإعدادات
 function createSettingsModal() {
+    // ... باقي الكود كما هو ...
     const settings = JSON.parse(localStorage.getItem('settings')) || DEFAULT_SETTINGS;
     const modal = document.createElement('div');
     modal.className = 'settings-modal';
@@ -976,6 +968,7 @@ function createSettingsModal() {
 
 // تهيئة التطبيق
 function initApp() {
+    // ... باقي الكود كما هو ...
     if (currentConversationId) {
         const savedConv = conversations.find(c => c.id === currentConversationId);
         if (savedConv && savedConv.messages.length > 0) {
@@ -1004,6 +997,18 @@ function initApp() {
         appLoader.classList.add('fade-out');
         setTimeout(() => appLoader.remove(), 500);
     }, 1000);
+
+    // التحقق من تحميل المكتبات عند بدء التشغيل
+    if (typeof hljs === 'undefined') {
+        console.error('Highlight.js is not loaded');
+        showNotification('خطأ في تحميل مكتبة تلوين الكود', 'error');
+    }
+    if (typeof MathJax === 'undefined') {
+        console.error('MathJax is not loaded');
+        showNotification('خطأ في تحميل مكتبة المعادلات الرياضية', 'error');
+    } else {
+        console.log('MathJax loaded successfully.'); // تأكيد التحميل في الكونسول
+    }
 
     console.log("Application initialized");
 }
