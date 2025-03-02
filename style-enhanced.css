@@ -98,7 +98,7 @@ body[data-theme="light"] {
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    justify-content: space-between; /* تغيير لإفساح المجال لزر الإغلاق */
+    justify-content: space-between;
     position: relative;
 }
 
@@ -111,7 +111,7 @@ body[data-theme="light"] {
     padding: 0.5rem;
     border-radius: 50%;
     transition: all var(--transition-speed) ease;
-    display: none; /* مخفي افتراضيًا على الشاشات الكبيرة */
+    display: none;
 }
 
 .sidebar-close-btn:hover {
@@ -650,9 +650,10 @@ body[data-theme="light"] {
     transform: scale(1.1);
 }
 
+/* تنسيق الكود داخل الرسائل */
 .code-container {
     display: flex;
-    flex-direction: column; /* Keep vertical flex for overall container */
+    flex-direction: column;
     background-color: #1e1e1e;
     border-radius: var(--border-radius-md);
     overflow: hidden;
@@ -676,16 +677,6 @@ body[data-theme="light"] {
     padding: 0.8rem 1.2rem;
     background-color: #252525;
     border-bottom: 1px solid #404040;
-}
-
-.code-header:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
 }
 
 .code-language {
@@ -717,35 +708,27 @@ body[data-theme="light"] {
     transform: translateY(-2px);
 }
 
-.copy-btn svg,
-.copy-btn i {
-    color: #fff;
-    transition: all 0.2s ease;
+.copy-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
-.copy-btn.copied {
-    background: #10B981;
+.copy-btn .check-icon {
+    display: none;
 }
 
-.copy-btn.copied svg,
-.copy-btn.copied i {
-    color: #fff;
+.copy-btn.copied .copy-icon {
+    display: none;
+}
+
+.copy-btn.copied .check-icon {
+    display: inline;
 }
 
 .code-body {
-    display: flex; /* Enable flex layout for code body */
-    flex-direction: row-reverse; /* Set direction to row-reverse for RTL */
-}
-
-.code-content {
-    padding: 1rem;
-    overflow-x: auto; /* دعم التمرير الأفقي */
-    flex: 1; /* Allow code content to take available space */
-    white-space: pre-wrap; /* منع التجاوز مع دعم الالتفاف */
-    word-break: break-word; /* كسر الكلمات الطويلة */
-    max-width: 100%; /* ضمان عدم التجاوز */
-    direction: ltr; /* Ensure code content is LTR */
-    text-align: left; /* Align text to the left */
+    display: flex;
+    flex-direction: row-reverse;
+    overflow-x: auto;
 }
 
 .line-numbers {
@@ -754,13 +737,10 @@ body[data-theme="light"] {
     color: #858585;
     font-family: 'Fira Code', monospace;
     font-size: var(--font-size-sm);
-    text-align: right; /* Align line numbers to the right */
+    text-align: right;
     min-width: 40px;
-    border-right: 1px solid #404040; /* Border on the right for RTL */
+    border-left: 1px solid #404040;
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column; /* Ensure numbers stack vertically */
-    justify-content: flex-start; /* Align numbers to the start (top) */
 }
 
 .line-number {
@@ -769,9 +749,13 @@ body[data-theme="light"] {
     padding: 0 0.5rem;
 }
 
-.line-number:hover {
-    color: #e6e6e6;
-    background-color: rgba(255, 255, 255, 0.05);
+.code-content {
+    padding: 1rem;
+    flex: 1;
+    white-space: pre-wrap;
+    word-break: break-word;
+    direction: ltr;
+    text-align: left;
 }
 
 .code-content .line {
@@ -780,13 +764,28 @@ body[data-theme="light"] {
     font-size: var(--font-size-sm);
     line-height: 1.5;
     padding-left: 0.5rem;
-    border-left: 3px solid transparent; /* Border on the left for RTL */
-    min-height: 1.5em;
 }
 
-.code-content .line:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-left: 3px solid var(--primary-color); /* Border on the left for RTL */
+/* تنسيق المعادلات الرياضية (KaTeX) */
+.katex {
+    font-size: var(--font-size-md);
+    direction: ltr;
+    display: inline-block;
+    margin: 0.5rem 0;
+}
+
+.katex-display {
+    display: block;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.message .katex {
+    color: var(--text-light);
+}
+
+.message .katex-html {
+    overflow-x: auto;
 }
 
 /* تحسين إشعارات النسخ */
@@ -804,8 +803,6 @@ body[data-theme="light"] {
     opacity: 0;
     transform: translateY(20px);
     animation: notificationFadeIn 0.3s ease forwards;
-    direction: ltr; /* Ensure notification text is LTR */
-    text-align: left; /* Align text to the left */
 }
 
 .copy-notification.error {
@@ -821,13 +818,6 @@ body[data-theme="light"] {
     align-items: center;
     gap: 0.5rem;
     padding: 0.8rem 1.2rem;
-    direction: rtl; /* Revert direction for content inside notification if needed */
-    text-align: right; /* Revert text alignment inside notification if needed */
-}
-
-.copy-text {
-    margin-right: 5px;
-    font-size: var(--font-size-sm);
 }
 
 @keyframes notificationFadeIn {
@@ -838,46 +828,6 @@ body[data-theme="light"] {
 @keyframes notificationFadeOut {
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(20px); }
-}
-
-/* تنسيق الكود داخل الرسائل */
-.message pre {
-    margin: 1rem 0;
-    padding: 0;
-    background: transparent;
-    border-radius: var(--border-radius-md);
-    overflow: hidden;
-}
-
-.message pre code {
-    counter-reset: line;
-    display: block;
-    padding: 0;
-    color: #d4d4d4;
-    font-family: 'Fira Code', monospace;
-    font-size: var(--font-size-sm);
-    line-height: 1.5;
-    direction: ltr; /* Force code to be LTR */
-    text-align: left; /* Align code text to the left */
-}
-
-.message pre code > span {
-    display: block;
-    position: relative;
-    padding-left: 4em;
-}
-
-.message pre code > span:before {
-    content: counter(line);
-    counter-increment: line;
-    position: absolute;
-    left: 0;
-    padding-right: 1em;
-    width: 2.5em;
-    text-align: right;
-    color: #858585;
-    border-right: 1px solid #404040;
-    margin-right: 1em;
 }
 
 /* أنيميشن التفكير */
@@ -924,25 +874,13 @@ body[data-theme="light"] {
 }
 
 @keyframes dotFlashing {
-    0% {
-        opacity: 0.2;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+    0% { opacity: 0.2; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* تنسيق نافذة الإعدادات */
@@ -1106,7 +1044,7 @@ body[data-theme="light"] {
 
 @media (max-width: 768px) {
     :root {
-        --sidebar-width: 100%; /* تغيير العرض إلى 100% للشاشات الصغيرة */
+        --sidebar-width: 100%;
     }
 
     .sidebar {
@@ -1118,20 +1056,20 @@ body[data-theme="light"] {
         z-index: 100;
         transform: translateX(100%);
         transition: transform var(--transition-speed) ease;
-        overflow-y: auto; /* إضافة التمرير العمودي إذا زاد المحتوى */
+        overflow-y: auto;
     }
 
     .sidebar.closed {
-        transform: translateX(0); /* الشريط يظهر عند فتحه */
+        transform: translateX(0);
     }
 
     .sidebar-close-btn {
-        display: block; /* إظهار زر الإغلاق داخل الشريط الجانبي */
+        display: block;
     }
 
     .main-content {
         margin-right: 0;
-        width: 100%; /* ضمان امتلاء المحتوى الرئيسي للشاشة */
+        width: 100%;
     }
 
     .main-content.expanded {
@@ -1145,20 +1083,6 @@ body[data-theme="light"] {
     .message {
         padding: 1rem 1.25rem;
         max-width: 95%;
-    }
-
-    .code-header {
-        padding: 0.6rem 1rem;
-    }
-
-    .code-body {
-        display: flex;
-        flex-direction: row-reverse; /* لدعم RTL */
-        overflow-x: auto;
-    }
-
-    .thinking-animation {
-        max-width: 80%;
     }
 }
 
@@ -1238,22 +1162,6 @@ body[data-theme="light"] {
 
     .code-container {
         margin: 0.8rem 0;
-    }
-
-    .code-header {
-        padding: 0.4rem;
-    }
-
-    .line-number, .line {
-        font-size: var(--font-size-xs);
-    }
-
-    .line {
-        display: block;
-        font-family: 'Fira Code', monospace;
-        font-size: var(--font-size-sm);
-        line-height: 1.5;
-        padding-left: 0.5rem;
     }
 
     .settings-content h2 {
@@ -1352,24 +1260,6 @@ body[data-theme="light"] {
     text-decoration: underline;
 }
 
-.message a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--primary-color);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform var(--transition-speed) ease;
-}
-
-.message a:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
 /* تنسيق الجداول */
 .message table {
     width: 100%;
@@ -1434,139 +1324,6 @@ body[data-theme="light"] {
     height: 1px;
     background: var(--border-color);
     margin: 1.5rem 0;
-}
-
-/* تنسيق الرموز التعبيرية */
-.emoji {
-    font-size: 1.5em;
-    vertical-align: middle;
-    margin: 0 0.2em;
-}
-
-/* تنسيق الأزرار داخل الرسائل */
-.message-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border-radius: var(--border-radius-sm);
-    margin: 0.5rem 0;
-    text-decoration: none;
-    transition: all var(--transition-speed) ease;
-    border: none;
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
-}
-
-.message-button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-/* تنسيق الشارات */
-.badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    margin-right: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
-}
-
-.badge.primary {
-    background: var(--primary-color);
-    color: white;
-}
-
-.badge.secondary {
-    background: var(--secondary-color);
-    color: white;
-}
-
-.badge.accent {
-    background: var(--accent-color);
-    color: white;
-}
-
-/* تنسيق الأيقونات */
-.icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    margin-right: 0.5rem;
-    transition: all var(--transition-speed) ease;
-}
-
-.icon:hover {
-    background: var(--primary-color);
-    transform: rotate(15deg);
-}
-
-/* تنسيق الرسائل الخاصة */
-.message.system {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(79, 70, 229, 0.2));
-    border-color: rgba(139, 92, 246, 0.3);
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 90%;
-    text-align: center;
-}
-
-/* تنسيق الرسائل الخطأ */
-.message.error {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.2));
-    border-color: rgba(239, 68, 68, 0.3);
-}
-
-/* تنسيق الرسائل التحذيرية */
-.message.warning {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-/* تنسيق الرسائل النجاح */
-.message.success {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-/* تنسيق الرسائل المعلوماتية */
-.message.info {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
-    border-color: rgba(59, 130, 246, 0.3);
-}
-
-/* تنسيق الأزرار العائمة */
-.floating-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-xl);
-    box-shadow: var(--shadow-lg);
-    cursor: pointer;
-    transition: all var(--transition-speed) ease;
-    z-index: 100;
-}
-
-.floating-button:hover {
-    transform: translateY(-5px) rotate(15deg);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* تنسيق شريط التمرير */
