@@ -5,22 +5,22 @@
     --secondary-color: #3730a3;
     --accent-color: #8b5cf6;
 
-    /* ألوان الخلفية */
+    /* ألوان الخلفية - الثيم الداكن كافتراضي */
     --bg-dark: #0f172a;
     --bg-darker: #020617;
     --bg-light: #f8fafc;
 
-    /* ألوان النصوص */
+    /* ألوان النصوص - الثيم الداكن */
     --text-light: #f1f5f9;
     --text-dark: #1e293b;
     --text-muted: #94a3b8;
 
-    /* ألوان الرسائل */
+    /* ألوان الرسائل - الثيم الداكن */
     --message-sent-bg: linear-gradient(135deg, #4f46e5, #3730a3);
     --message-received-bg: rgba(30, 41, 59, 0.8);
     --message-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 
-    /* ألوان الحدود والظلال */
+    /* ألوان الحدود والظلال - الثيم الداكن */
     --border-color: rgba(255, 255, 255, 0.1);
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -60,14 +60,20 @@ body {
     height: 100vh;
 }
 
+/* الثيم الأبيض - تعديل المتغيرات عند تفعيله */
 body[data-theme="light"] {
-    --bg-dark: #f1f5f9;
-    --bg-darker: #e2e8f0;
-    --message-received-bg: rgba(241, 245, 249, 0.9);
-    --text-light: #1e293b;
-    --text-dark: #f1f5f9;
-    --text-muted: #64748b;
+    --bg-dark: #ffffff; /* خلفية بيضاء نقية */
+    --bg-darker: #f7f7f9; /* لون رمادي فاتح للتباين */
+    --bg-light: #fafafa;
+    --text-light: #1f2a44; /* لون أغمق للنصوص */
+    --text-dark: #0f172a;
+    --text-muted: #6b7280;
+    --message-received-bg: #f1f5f9;
     --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --message-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 /* تنسيق الحاوية الرئيسية */
@@ -75,17 +81,18 @@ body[data-theme="light"] {
     display: flex;
     height: 100vh;
     overflow: hidden;
+    background: var(--bg-dark); /* يتغير حسب الثيم */
 }
 
 /* تنسيق الشريط الجانبي */
 .sidebar {
     width: var(--sidebar-width);
-    background: linear-gradient(to bottom, #1e1b4b, #111827);
+    background: var(--bg-darker); /* يتغير حسب الثيم */
     display: flex;
     flex-direction: column;
     transition: transform var(--transition-speed) ease;
     z-index: 50;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     position: relative;
 }
 
@@ -115,8 +122,11 @@ body[data-theme="light"] {
 }
 
 .sidebar-close-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .sidebar-close-btn:hover {
+    background: rgba(0, 0, 0, 0.05); /* الثيم الأبيض */
 }
 
 .sidebar-content {
@@ -157,12 +167,12 @@ body[data-theme="light"] {
 .logo {
     font-size: var(--font-size-xl);
     font-weight: 700;
-    color: white;
+    color: var(--text-light);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .logo i {
@@ -209,7 +219,7 @@ body[data-theme="light"] {
 .chat-item {
     padding: 0.75rem 1rem;
     border-radius: var(--border-radius-sm);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
     border: 1px solid var(--border-color);
     transition: all var(--transition-speed) ease;
     cursor: pointer;
@@ -219,9 +229,16 @@ body[data-theme="light"] {
     position: relative;
 }
 
+body[data-theme="light"] .chat-item {
+    background: var(--bg-light); /* الثيم الأبيض */
+}
+
 .chat-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(-4px);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .chat-item:hover {
+    background: rgba(0, 0, 0, 0.03); /* الثيم الأبيض */
 }
 
 .chat-item i {
@@ -259,7 +276,7 @@ body[data-theme="light"] {
 /* زر الإعدادات */
 .settings-btn {
     padding: 0.75rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     color: var(--text-light);
@@ -272,9 +289,16 @@ body[data-theme="light"] {
     width: 100%;
 }
 
+body[data-theme="light"] .settings-btn {
+    background: var(--bg-light); /* الثيم الأبيض */
+}
+
 .settings-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .settings-btn:hover {
+    background: rgba(0, 0, 0, 0.03); /* الثيم الأبيض */
 }
 
 .settings-btn i {
@@ -303,10 +327,15 @@ body[data-theme="light"] {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(15, 23, 42, 0.8); /* الثيم الداكن */
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 10;
+}
+
+body[data-theme="light"] .main-header {
+    background: var(--bg-dark); /* الثيم الأبيض */
+    backdrop-filter: none;
 }
 
 .header-title {
@@ -343,8 +372,11 @@ body[data-theme="light"] {
 }
 
 .toggle-sidebar:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .toggle-sidebar:hover {
+    background: rgba(0, 0, 0, 0.05); /* الثيم الأبيض */
 }
 
 /* زر تبديل السمة */
@@ -360,8 +392,11 @@ body[data-theme="light"] {
 }
 
 .theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: rotate(45deg);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.05); /* الثيم الأبيض */
 }
 
 /* حاوية المحادثة */
@@ -379,21 +414,23 @@ body[data-theme="light"] {
     overflow-y: auto;
     padding: 2rem;
     scroll-behavior: smooth;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.7));
-    background-size: cover;
-    background-attachment: fixed;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.7)); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .chat-messages {
+    background: var(--bg-dark); /* الثيم الأبيض */
 }
 
 /* تنسيق الرسائل */
 .message {
-    padding: 1.25rem;
-    margin: 1.5rem 0;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    backdrop-filter: blur(10px);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    background: var(--message-received-bg);
     border: 1px solid var(--border-color);
     transition: all var(--transition-speed) ease;
-    max-width: 85%;
+    max-width: 90%;
     word-wrap: break-word;
     position: relative;
     display: flex;
@@ -409,25 +446,31 @@ body[data-theme="light"] {
     margin-left: auto;
     background: var(--message-sent-bg);
     border-color: rgba(79, 70, 229, 0.3);
+    color: white;
 }
 
 .message.received {
     margin-right: auto;
     background: var(--message-received-bg);
     border-color: var(--border-color);
+    color: var(--text-light);
 }
 
 .message-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--font-size-lg);
-    color: var(--text-light);
+    color: var(--text-muted);
     flex-shrink: 0;
+}
+
+body[data-theme="light"] .message-avatar {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .message-content {
@@ -451,9 +494,14 @@ body[data-theme="light"] {
 
 /* رسالة الترحيب */
 .welcome-message {
-    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(55, 48, 163, 0.2));
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(55, 48, 163, 0.2)); /* الثيم الداكن */
     border: 1px solid rgba(79, 70, 229, 0.3);
     max-width: 95%;
+}
+
+body[data-theme="light"] .welcome-message {
+    background: var(--bg-light); /* الثيم الأبيض */
+    border: 1px solid var(--border-color);
 }
 
 .welcome-suggestions {
@@ -464,7 +512,7 @@ body[data-theme="light"] {
 }
 
 .suggestion-btn {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     padding: 0.5rem 1rem;
@@ -474,48 +522,68 @@ body[data-theme="light"] {
     font-size: var(--font-size-sm);
 }
 
+body[data-theme="light"] .suggestion-btn {
+    background: var(--bg-darker); /* الثيم الأبيض */
+}
+
 .suggestion-btn:hover {
-    background: rgba(79, 70, 229, 0.2);
+    background: rgba(79, 70, 229, 0.2); /* الثيم الداكن */
     border-color: rgba(79, 70, 229, 0.5);
-    transform: translateY(-2px);
+}
+
+body[data-theme="light"] .suggestion-btn:hover {
+    background: rgba(79, 70, 229, 0.1); /* الثيم الأبيض */
+    border-color: rgba(79, 70, 229, 0.3);
 }
 
 /* حاوية إدخال الرسائل */
 .chat-input-container {
-    padding: 1.5rem;
-    background: rgba(15, 23, 42, 0.9);
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.9); /* الثيم الداكن */
     backdrop-filter: blur(10px);
     border-top: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
     position: relative;
     z-index: 5;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .chat-input-container {
+    background: var(--bg-dark); /* الثيم الأبيض */
+    backdrop-filter: none;
 }
 
 .input-wrapper {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius-lg);
-    padding: 0.75rem 1.25rem;
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1rem;
     border: 1px solid var(--border-color);
     transition: all var(--transition-speed) ease;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    width: 100%; /* ضمان التمدد الكامل */
+    max-width: 100%; /* منع التجاوز */
+}
+
+body[data-theme="light"] .input-wrapper {
+    background: var(--bg-darker); /* الثيم الأبيض */
 }
 
 .input-wrapper:focus-within {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 #messageInput {
     flex: 1;
     background: transparent;
     border: none;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
     font-size: var(--font-size-md);
     color: var(--text-light);
     outline: none;
-    font-family: 'Cairo', 'Tajawal', sans-serif;
+    width: 100%; /* ضمان التمدد الكامل */
+    resize: none; /* منع تغيير الحجم */
 }
 
 #messageInput::placeholder {
@@ -538,10 +606,15 @@ body[data-theme="light"] {
     justify-content: center;
     font-size: var(--font-size-lg);
     transition: all var(--transition-speed) ease;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.08); /* الثيم الداكن */
     border: none;
     color: var(--text-light);
     cursor: pointer;
+}
+
+body[data-theme="light"] .input-buttons button,
+body[data-theme="light"] .upload-btn {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .input-buttons button:hover,
@@ -549,6 +622,7 @@ body[data-theme="light"] {
     background: var(--primary-color);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    color: white;
 }
 
 /* معاينة الملفات */
@@ -556,11 +630,15 @@ body[data-theme="light"] {
     position: relative;
     margin-bottom: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
     border-radius: var(--border-radius-md);
     border: 1px solid var(--border-color);
     animation: fadeInUp 0.3s ease-out;
     text-align: center;
+}
+
+body[data-theme="light"] .file-preview-container {
+    background: var(--bg-darker); /* الثيم الأبيض */
 }
 
 @keyframes fadeInUp {
@@ -593,9 +671,13 @@ body[data-theme="light"] {
 .file-preview audio {
     width: 100%;
     margin-top: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border-radius: var(--border-radius-sm);
     outline: none;
+}
+
+body[data-theme="light"] .file-preview audio {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .file-preview .pdf-preview {
@@ -603,6 +685,10 @@ body[data-theme="light"] {
     height: 100%;
     background: url('https://img.icons8.com/ios-filled/50/ffffff/pdf.png') no-repeat center;
     background-size: 50px;
+}
+
+body[data-theme="light"] .file-preview .pdf-preview {
+    background: url('https://img.icons8.com/ios-filled/50/000000/pdf.png') no-repeat center;
 }
 
 .file-preview .text-file-preview {
@@ -613,8 +699,12 @@ body[data-theme="light"] {
     justify-content: center;
     font-size: var(--font-size-sm);
     color: var(--text-light);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border-radius: var(--border-radius-sm);
+}
+
+body[data-theme="light"] .file-preview .text-file-preview {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .file-preview:hover {
@@ -654,14 +744,18 @@ body[data-theme="light"] {
 .code-container {
     display: flex;
     flex-direction: column;
-    background-color: #1e1e1e;
+    background-color: #1e1e1e; /* الثيم الداكن */
     border-radius: var(--border-radius-md);
     overflow: hidden;
     margin: 1.5rem 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
     max-width: 100%;
+}
+
+body[data-theme="light"] .code-container {
+    background-color: #f7f7f9; /* الثيم الأبيض */
 }
 
 .code-container:hover {
@@ -675,22 +769,30 @@ body[data-theme="light"] {
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 1.2rem;
-    background-color: #252525;
-    border-bottom: 1px solid #404040;
+    background-color: #252525; /* الثيم الداكن */
+    border-bottom: 1px solid var(--border-color);
+}
+
+body[data-theme="light"] .code-header {
+    background-color: var(--bg-darker); /* الثيم الأبيض */
 }
 
 .code-language {
     font-family: 'Fira Code', monospace;
     font-size: var(--font-size-xs);
-    color: #e6e6e6;
-    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     padding: 0.3rem 0.8rem;
     border-radius: var(--border-radius-sm);
     text-transform: uppercase;
 }
 
+body[data-theme="light"] .code-language {
+    background: var(--bg-light); /* الثيم الأبيض */
+}
+
 .copy-btn {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border: none;
     border-radius: var(--border-radius-sm);
     padding: 0.4rem 0.8rem;
@@ -699,13 +801,18 @@ body[data-theme="light"] {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    color: #fff;
+    color: var(--text-light);
     font-size: var(--font-size-sm);
+}
+
+body[data-theme="light"] .copy-btn {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .copy-btn:hover {
     background: var(--primary-color);
     transform: translateY(-2px);
+    color: white;
 }
 
 .copy-btn svg {
@@ -733,14 +840,18 @@ body[data-theme="light"] {
 
 .line-numbers {
     padding: 1rem 0.5rem;
-    background-color: #252525;
-    color: #858585;
+    background-color: #252525; /* الثيم الداكن */
+    color: var(--text-muted);
     font-family: 'Fira Code', monospace;
     font-size: var(--font-size-sm);
     text-align: right;
     min-width: 40px;
-    border-left: 1px solid #404040;
+    border-left: 1px solid var(--border-color);
     flex-shrink: 0;
+}
+
+body[data-theme="light"] .line-numbers {
+    background-color: var(--bg-darker); /* الثيم الأبيض */
 }
 
 .line-number {
@@ -837,8 +948,8 @@ body[data-theme="light"] {
     padding: 1rem 1.5rem;
     margin: 1rem 0;
     background-color: var(--message-received-bg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
     animation: fadeIn 0.3s ease-in-out;
     max-width: 80%;
     margin-right: auto;
@@ -890,7 +1001,7 @@ body[data-theme="light"] {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8); /* الثيم الداكن */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -899,8 +1010,12 @@ body[data-theme="light"] {
     animation: fadeIn 0.3s ease;
 }
 
+body[data-theme="light"] .settings-modal {
+    background: rgba(0, 0, 0, 0.5); /* الثيم الأبيض */
+}
+
 .settings-content {
-    background: linear-gradient(135deg, #1e1b4b, #111827);
+    background: linear-gradient(135deg, #1e1b4b, #111827); /* الثيم الداكن */
     padding: 2rem;
     border-radius: var(--border-radius-lg);
     width: 90%;
@@ -910,13 +1025,17 @@ body[data-theme="light"] {
     animation: slideUp 0.3s ease;
 }
 
+body[data-theme="light"] .settings-content {
+    background: var(--bg-dark); /* الثيم الأبيض */
+}
+
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .settings-content h2 {
-    color: white;
+    color: var(--text-light);
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
@@ -939,12 +1058,17 @@ body[data-theme="light"] {
 .settings-group input[type='checkbox'] {
     width: 100%;
     padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    color: white;
+    color: var(--text-light);
     transition: all 0.3s ease;
     font-family: 'Cairo', 'Tajawal', sans-serif;
+}
+
+body[data-theme="light"] .settings-group select,
+body[data-theme="light"] .settings-group input[type='checkbox'] {
+    background: var(--bg-darker); /* الثيم الأبيض */
 }
 
 .settings-group select:hover,
@@ -990,8 +1114,8 @@ body[data-theme="light"] {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+    color: var(--text-light);
     width: 32px;
     height: 32px;
     display: flex;
@@ -1004,9 +1128,16 @@ body[data-theme="light"] {
     transition: all 0.3s ease;
 }
 
+body[data-theme="light"] .close-settings-btn {
+    background: var(--bg-darker); /* الثيم الأبيض */
+}
+
 .close-settings-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.2); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .close-settings-btn:hover {
+    background: rgba(0, 0, 0, 0.1); /* الثيم الأبيض */
 }
 
 /* تحسين التوافق مع الأجهزة المختلفة */
@@ -1084,6 +1215,28 @@ body[data-theme="light"] {
         padding: 1rem 1.25rem;
         max-width: 95%;
     }
+
+    .chat-input-container {
+        padding: 0.75rem; /* تقليل الحشوة على الهواتف */
+    }
+
+    .input-wrapper {
+        padding: 0.5rem 0.75rem;
+        flex-wrap: wrap; /* السماح بالالتفاف إذا لزم الأمر */
+    }
+
+    #messageInput {
+        font-size: var(--font-size-sm); /* تقليل حجم الخط على الهواتف */
+        min-height: 40px; /* ارتفاع أدنى لضمان الظهور الكامل */
+        max-height: 100px; /* الحد الأقصى للارتفاع */
+        overflow-y: auto; /* السماح بالتمرير إذا زاد النص */
+    }
+
+    .input-buttons button,
+    .upload-btn {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1096,22 +1249,20 @@ body[data-theme="light"] {
     }
 
     .chat-input-container {
-        padding: 1rem;
+        padding: 0.5rem;
     }
 
     .input-wrapper {
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.6rem;
     }
 
     #messageInput {
-        padding: 0.6rem 0;
-        font-size: var(--font-size-md);
+        font-size: var(--font-size-sm);
+        min-height: 36px; /* تقليل الارتفاع للشاشات الصغيرة */
     }
 
-    .input-buttons button,
-    .upload-btn {
-        width: 36px;
-        height: 36px;
+    .input-buttons {
+        gap: 0.5rem;
     }
 
     .message {
@@ -1278,16 +1429,27 @@ body[data-theme="light"] {
 }
 
 .message table th {
-    background: rgba(255, 255, 255, 0.1);
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .message table th {
+    background: var(--bg-darker); /* الثيم الأبيض */
 }
 
 .message table tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .message table tr:nth-child(even) {
+    background: var(--bg-light); /* الثيم الأبيض */
 }
 
 .message table tr:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
+}
+
+body[data-theme="light"] .message table tr:hover {
+    background: rgba(0, 0, 0, 0.03); /* الثيم الأبيض */
 }
 
 /* تنسيق القوائم */
@@ -1314,8 +1476,12 @@ body[data-theme="light"] {
     border-right: 4px solid var(--primary-color);
     padding: 0.5rem 1rem;
     margin: 1rem 0;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
     border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+}
+
+body[data-theme="light"] .message blockquote {
+    background: var(--bg-darker); /* الثيم الأبيض */
 }
 
 /* تنسيق الفواصل الأفقية */
@@ -1333,13 +1499,21 @@ body[data-theme="light"] {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05); /* الثيم الداكن */
     border-radius: 10px;
 }
 
+body[data-theme="light"] ::-webkit-scrollbar-track {
+    background: var(--bg-darker); /* الثيم الأبيض */
+}
+
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1); /* الثيم الداكن */
     border-radius: 10px;
+}
+
+body[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* الثيم الأبيض */
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -1350,4 +1524,15 @@ body[data-theme="light"] {
 ::selection {
     background: var(--primary-color);
     color: white;
+}
+
+/* تحسين التوافق مع الشاشات الكبيرة */
+@media (min-width: 1200px) {
+    .message {
+        max-width: 75%;
+    }
+
+    .input-wrapper {
+        padding: 1rem 1.5rem;
+    }
 }
