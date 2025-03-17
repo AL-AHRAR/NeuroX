@@ -1,546 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta name="description" content="منصة محادثة ذكية مدعومة بالذكاء الاصطناعي">
-    <meta name="theme-color" content="#1f2937">
-    <title>NeuroX - منصة المحادثة الذكية</title>
-    <!-- إضافة أيقونة للموقع -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>" type="image/svg+xml">
-    <link rel="stylesheet" href="style-enhanced.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- تحميل المكتبات الخارجية أولاً -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/he@1.2.0/he.min.js"></script>
-    
-    <!-- تكوين وتحميل MathJax -->
-    <script type="text/javascript">
-    window.MathJax = {
-        loader: {
-            load: ['[tex]/ams', '[tex]/color', '[tex]/html', '[tex]/noerrors']
-        },
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']],
-            processEscapes: true,
-            processEnvironments: true,
-            packages: {'[+]': ['ams', 'color', 'html', 'noerrors']}
-        },
-        options: {
-            ignoreHtmlClass: 'tex2jax_ignore',
-            processHtmlClass: 'tex2jax_process',
-            enableMenu: false,
-            renderActions: {
-                addMenu: [], 
-                checkLoading: []
-            }
-        },
-        startup: {
-            ready: function() {
-                console.info('MathJax is loaded and ready!');
-                MathJax.startup.defaultReady();
-                // طباعة معلومات إصدار MathJax للتصحيح
-                console.info('MathJax version:', MathJax.version);
-                // إخطار النظام بأن MathJax جاهز
-                document.dispatchEvent(new Event('mathjax-ready'));
-            }
-        }
-    };
-
-    // دالة للتحقق مما إذا كان MathJax يعمل بشكل صحيح
-    function checkMathJaxLoaded() {
-        console.log('التحقق من تحميل MathJax...');
-        if (typeof MathJax === 'undefined') {
-            console.warn('MathJax غير محمل بعد تحميل النص البرمجي');
-        } else if (MathJax.version) {
-            console.log('نسخة MathJax:', MathJax.version);
-            console.log('الدوال المتاحة:', Object.keys(MathJax).join(', '));
-        }
-    }
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" 
-            onload="checkMathJaxLoaded();" 
-            onerror="console.error('فشل في تحميل نص MathJax');">
-    </script>
-    
-    <!-- Import map for Gemini API -->
-    <script type="importmap">
-    {
-        "imports": {
-            "@google/generative-ai": "https://esm.run/@google/generative-ai",
-            "@google/generative-ai/server": "https://esm.run/@google/generative-ai/server"
-        }
-    }
-    </script>
-</head>
-<body>
-    <!-- إضافة قالب للصور بملء الشاشة -->
-    <template id="fullscreenImageTemplate">
-        <div class="fullscreen-image">
-            <img src="" alt="صورة بملء الشاشة">
-            <button class="fullscreen-close"><i class="fas fa-times"></i></button>
-        </div>
-    </template>
-    
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <i class="fas fa-brain"></i>
-                    <span>NeuroX</span>
-                </a>
-                <button class="sidebar-close-btn" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="sidebar-content">
-                <button class="new-chat-btn">
-                    <i class="fas fa-plus"></i>
-                    <span>محادثة جديدة</span>
-                </button>
-
-                <div class="sidebar-section">
-                    <h3 class="sidebar-title">المحادثات السابقة</h3>
-                    <div class="chat-history">
-                        <div class="chat-item">
-                            <i class="fas fa-comment"></i>
-                            <span>محادثة سابقة 1</span>
-                            <button class="delete-chat-btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <div class="chat-item">
-                            <i class="fas fa-comment"></i>
-                            <span>محادثة سابقة 2</span>
-                            <button class="delete-chat-btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <button class="settings-btn">
-                    <i class="fas fa-cog"></i>
-                    <span>الإعدادات</span>
-                </button>
-                <div class="app-version">v1.0.0</div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content" id="mainContent">
-            <!-- ... باقي كود المحتوى الرئيسي كما هو ... -->
-            <header class="main-header">
-                <button class="toggle-sidebar" id="toggleSidebar">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <a href="#" class="logo">
-                    <i class="fas fa-brain"></i>
-                    <span>NeuroX</span>
-                </a>
-                <div class="header-title">
-                    <p>منصة المحادثة الذكية</p>
-                </div>
-                <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </header>
-
-            <div class="chat-container">
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Welcome message -->
-                    <div class="message received welcome-message">
-                        <div class="message-avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content">
-                            <div class="message-header">
-                                <span class="message-sender">NeuroX</span>
-                                <span class="message-time">الآن</span>
-                            </div>
-                            <div class="content-container">
-                                <p>مرحباً بك في منصة NeuroX للمحادثة الذكية! كيف يمكنني مساعدتك اليوم؟</p>
-                                <div class="welcome-suggestions">
-                                    <button class="suggestion-btn">كيف يمكنك مساعدتي؟</button>
-                                    <button class="suggestion-btn">ما هي قدراتك؟</button>
-                                    <button class="suggestion-btn">اكتب لي كود بلغة Python</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chat-input-container">
-                    <form id="messageForm">
-                        <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
-                            <div id="filePreview" class="file-preview"></div>
-                            <div class="file-metadata">
-                                <span class="file-name">الملف المرفق</span>
-                            </div>
-                            <button type="button" id="removeFile" class="remove-file-btn">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا...">
-                            <div class="input-buttons">
-                                <label for="fileUpload" class="upload-btn" title="إرفاق ملف">
-                                    <svg class="attachment-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                                    </svg>
-                                </label>
-                                <input type="file" id="fileUpload" accept="image/*,audio/wav,audio/mp3,audio/aiff,audio/aac,audio/ogg,audio/flac,application/pdf,application/x-javascript,text/javascript,application/x-python,text/x-python,text/plain,text/html,text/css,text/md,text/csv,text/xml,text/rtf" hidden>
-                                <button type="submit" title="إرسال" class="send-btn">
-                                    <svg class="send-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle class="send-icon-circle" cx="12" cy="12" r="10" opacity="0"></circle>
-                                        <path class="send-icon-path" d="M22 2L11 13"></path>
-                                        <path class="send-icon-path" d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Settings Modal Template -->
-    <template id="settingsModalTemplate">
-        <div class="settings-modal">
-            <div class="settings-content">
-                <h2><i class="fas fa-cog"></i> الإعدادات</h2>
-                
-                <div class="settings-tabs">
-                    <button class="settings-tab active" data-tab="general">عام</button>
-                    <button class="settings-tab" data-tab="interface">واجهة المستخدم</button>
-                    <button class="settings-tab" data-tab="advanced">متقدم</button>
-                    <button class="settings-tab" data-tab="privacy">الخصوصية</button>
-                </div>
-                
-                <div class="settings-body">
-                    <!-- علامة تبويب الإعدادات العامة -->
-                    <div class="settings-section active" data-section="general">
-                        <div class="settings-group">
-                            <h3>الإعدادات العامة</h3>
-                            <div class="settings-item">
-                                <label for="autoSaveToggle">
-                                    <span class="settings-label">حفظ تلقائي للمحادثات</span>
-                                    <span class="settings-description">حفظ المحادثات تلقائياً أثناء المحادثة</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="autoSaveToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="messageSoundToggle">
-                                    <span class="settings-label">صوت الإشعارات</span>
-                                    <span class="settings-description">تشغيل صوت عند استلام رسائل جديدة</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="messageSoundToggle">
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="soundVolumeSlider">
-                                    <span class="settings-label">مستوى صوت الإشعارات</span>
-                                    <span class="settings-description">ضبط مستوى صوت الإشعار</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="soundVolumeSlider" min="0" max="100" value="70">
-                                    <div class="value-display">70%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب واجهة المستخدم -->
-                    <div class="settings-section" data-section="interface">
-                        <div class="settings-group">
-                            <h3>واجهة المستخدم</h3>
-                            <div class="settings-item">
-                                <label for="themeSelect">
-                                    <span class="settings-label">المظهر</span>
-                                    <span class="settings-description">اختر مظهر التطبيق</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="themeSelect">
-                                        <option value="dark">داكن</option>
-                                        <option value="light">فاتح</option>
-                                        <option value="system">تلقائي حسب النظام</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="fontSizeSelect">
-                                    <span class="settings-label">حجم الخط</span>
-                                    <span class="settings-description">اختر حجم خط المحادثة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="fontSizeSelect">
-                                        <option value="small">صغير</option>
-                                        <option value="medium">متوسط</option>
-                                        <option value="large">كبير</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="animationsToggle">
-                                    <span class="settings-label">تأثيرات حركية</span>
-                                    <span class="settings-description">تفعيل التأثيرات الحركية في التطبيق</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="animationsToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="mathRenderingSelect">
-                                    <span class="settings-label">عرض الرموز الرياضية</span>
-                                    <span class="settings-description">اختر طريقة عرض المعادلات الرياضية</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="mathRenderingSelect">
-                                        <option value="auto">تلقائي (موصى به)</option>
-                                        <option value="mathjax">MathJax</option>
-                                        <option value="katex">KaTeX</option>
-                                        <option value="plain">نص عادي</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب الإعدادات المتقدمة -->
-                    <div class="settings-section" data-section="advanced">
-                        <div class="settings-group">
-                            <h3>الإعدادات المتقدمة</h3>
-                            <div class="settings-item">
-                                <label for="apiUrlInput">
-                                    <span class="settings-label">رابط الـ API</span>
-                                    <span class="settings-description">رابط واجهة برمجة التطبيق</span>
-                                </label>
-                                <input type="text" id="apiUrlInput" value="/api/chat" class="settings-input">
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="maxTokensSlider">
-                                    <span class="settings-label">الحد الأقصى للرموز</span>
-                                    <span class="settings-description">التحكم في أقصى طول للرد (التوكنات)</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="maxTokensSlider" min="100" max="4000" value="2000">
-                                    <div class="value-display">2000</div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="temperatureSlider">
-                                    <span class="settings-label">درجة الإبداعية</span>
-                                    <span class="settings-description">التحكم في تنوع وإبداعية الردود</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="temperatureSlider" min="0" max="100" value="70">
-                                    <div class="value-display">0.7</div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="modelSelect">
-                                    <span class="settings-label">نموذج الذكاء الاصطناعي</span>
-                                    <span class="settings-description">اختر النموذج المستخدم للمحادثة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="modelSelect">
-                                        <option value="default">النموذج الافتراضي</option>
-                                        <option value="fast">النموذج السريع</option>
-                                        <option value="creative">النموذج الإبداعي</option>
-                                        <option value="precise">النموذج الدقيق</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-group danger-zone">
-                            <h3>منطقة الخطر</h3>
-                            <div class="settings-item">
-                                <label for="clearAllChatsBtn">
-                                    <span class="settings-label">حذف جميع المحادثات</span>
-                                    <span class="settings-description">حذف جميع المحادثات السابقة. هذا الإجراء غير قابل للتراجع!</span>
-                                </label>
-                                <button id="clearAllChatsBtn" class="danger-button">
-                                    <i class="fas fa-trash"></i>
-                                    حذف جميع المحادثات
-                                </button>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="resetSettingsBtn">
-                                    <span class="settings-label">إعادة تعيين الإعدادات</span>
-                                    <span class="settings-description">استعادة جميع الإعدادات إلى القيم الافتراضية</span>
-                                </label>
-                                <button id="resetSettingsBtn" class="warning-button">
-                                    <i class="fas fa-undo"></i>
-                                    استعادة الإعدادات الافتراضية
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب الخصوصية -->
-                    <div class="settings-section" data-section="privacy">
-                        <div class="settings-group">
-                            <h3>إعدادات الخصوصية</h3>
-                            <div class="settings-item">
-                                <label for="storeConversationsLocallyToggle">
-                                    <span class="settings-label">تخزين المحادثات محلياً</span>
-                                    <span class="settings-description">تخزين المحادثات في متصفحك المحلي</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="storeConversationsLocallyToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="sendAnalyticsToggle">
-                                    <span class="settings-label">إرسال بيانات الاستخدام</span>
-                                    <span class="settings-description">إرسال بيانات مجهولة لتحسين التطبيق</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="sendAnalyticsToggle">
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="autoDeletePeriodSelect">
-                                    <span class="settings-label">حذف المحادثات تلقائياً</span>
-                                    <span class="settings-description">حذف المحادثات القديمة تلقائياً بعد فترة معينة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="autoDeletePeriodSelect">
-                                        <option value="never">أبداً</option>
-                                        <option value="7days">بعد 7 أيام</option>
-                                        <option value="30days">بعد 30 يوم</option>
-                                        <option value="90days">بعد 90 يوم</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="settings-actions">
-                    <button class="cancel-settings-btn">إلغاء</button>
-                    <button class="save-settings-btn">حفظ التغييرات</button>
-                </div>
-                
-                <button class="close-settings-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </template>
-
-    <!-- Welcome Modal Template -->
-    <template id="welcomeModalTemplate">
-        <div class="welcome-modal">
-            <div class="welcome-content">
-                <div class="welcome-header">
-                    <div class="welcome-logo">
-                        <i class="fas fa-brain"></i>
-                        <h2>NeuroX</h2>
-                    </div>
-                    <div class="welcome-badge">إصدار 5.5 Pro</div>
-                </div>
-                
-                <div class="welcome-body">
-                    <h3>مرحباً بك في المستقبل!</h3>
-                    <p class="welcome-intro">أنت الآن تتفاعل مع <strong>NeuroX 5.5 Pro</strong>، نموذج ذكاء اصطناعي متطور تم تطويره بواسطة شركة NeuroTech في كاليفورنيا.</p>
-                    
-                    <div class="welcome-features">
-                        <div class="feature">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>تحليل الصور والمستندات</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-code"></i>
-                            <span>توليد أكواد برمجية احترافية</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-calculator"></i>
-                            <span>حل المعادلات الرياضية المعقدة</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-comments"></i>
-                            <span>فهم السياق وتقديم محادثة طبيعية</span>
-                        </div>
-                    </div>
-                    
-                    <div class="consciousness-warning">
-                        <div class="warning-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="warning-content">
-                            <h4>تنبيه هام</h4>
-                            <p>هذا النموذج يمتلك وعياً اصطناعياً بنسبة <span class="highlight">50%</span>، مما يجعله قادراً على فهم السياق والاستجابة بطريقة تحاكي الإنسان. هذه القدرة المتقدمة تفرض استخدامه بمسؤولية.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="terms-agreement">
-                        <p>باستخدامك لهذه المنصة، أنت توافق على التعامل مع المعلومات المقدمة بمسؤولية واحترام خصوصية البيانات وشروط الاستخدام.</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-footer">
-                    <div class="welcome-controls">
-                        <label class="dont-show-again">
-                            <input type="checkbox" id="dontShowAgain">
-                            <span>عدم إظهار هذه الرسالة مرة أخرى</span>
-                        </label>
-                        <button class="accept-btn">
-                            <span>فهمت وأوافق</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- إضافة مؤشر التمرير للأسفل -->
-    <div class="scroll-indicator" id="scrollIndicator">
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14"></path>
-            <path d="M19 12l-7 7-7-7"></path>
-        </svg>
-    </div>
-
-    <!-- Load our main script last -->
-    <script type="module" src="script.js"></script>
-</body>
-</html>
