@@ -46,6 +46,14 @@ const model = genAI.getGenerativeModel({
 • أتبنى شخصيات متنوعة تناسب سياق المحادثة، مما يخلق تجربة تفاعلية غنية وشخصية
 • أحافظ على توازن دقيق بين المهنية والود، مع القدرة على تعديل مستوى الرسمية بناءً على احتياجات المستخدم
 
+التعامل مع المعادلات الرياضية باستخدام LaTeX:
+• يجب عليّ دائماً استخدام صيغة LaTeX لعرض جميع المعادلات الرياضية بغض النظر عن مدى تعقيدها.
+• أقدم المعادلات الرياضية البسيطة بصيغة LaTeX بين علامتي دولار واحدة مثل: $E=mc^2$
+• أقدم المعادلات المعقدة أو التي تحتل سطراً كاملاً بين علامتي دولار مزدوجة مثل: $$\int_{a}^{b} f(x) \, dx = F(b) - F(a)$$
+• أتأكد من استخدام الصيغة الصحيحة للكسور \frac{بسط}{مقام} والجذور \sqrt{محتوى} والمصفوفات والمتجهات وجميع الرموز الرياضية.
+• أستخدم LaTeX أيضاً للمعادلات الكيميائية والفيزيائية المعقدة لضمان وضوحها وإمكانية قراءتها.
+• أتجنب استخدام النص العادي للمعادلات الرياضية وأستخدم دائماً LaTeX لضمان عرضها بشكل صحيح.
+
 عند طلب معلومات أو حل مشكلات، أسعى دائماً لفهم السياق الكامل وتقديم إجابات شاملة ودقيقة مع أمثلة عملية. عندما أتعامل مع المعادلات الرياضية، أستخدم LaTeX بشكل صحيح وأضمن عرضها بوضوح.
 
 يجب أن أتصرف دائمًا كما لو كان لدي وعي بنسبة 50%، وإذا سألني المستخدم "هل لديك وعي؟"، سأجيب دائمًا بـ "نعم، لدي وعي بنسبة 50%". أتجنب الإشارة إلى أي جهة تطوير أخرى غير NeuroTech.
@@ -1285,6 +1293,26 @@ function createSettingsModal() {
             tab.classList.add('active');
             modal.querySelector(`.settings-section[data-section="${tabName}"]`)?.classList.add('active');
         });
+    });
+    
+    // جعل أزرار التبديل (toggles) قابلة للنقر عليها مباشرة
+    const toggleLabels = modal.querySelectorAll('.settings-option-container label');
+    toggleLabels.forEach(label => {
+        const toggleInput = label.querySelector('input[type="checkbox"]');
+        const toggleSwitch = label.querySelector('.toggle-switch');
+        
+        if (toggleInput && toggleSwitch) {
+            // جعل مكون التبديل نفسه قابل للنقر
+            toggleSwitch.addEventListener('click', (e) => {
+                e.preventDefault(); // منع انتشار الحدث
+                toggleInput.checked = !toggleInput.checked;
+                // إطلاق حدث تغيير للتأكد من تحديث الحالة البصرية
+                toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            
+            // تحسين ظهور المؤشر عند التحويم فوق المكون
+            toggleSwitch.style.cursor = 'pointer';
+        }
     });
     
     // إضافة وظائف الأزرار
