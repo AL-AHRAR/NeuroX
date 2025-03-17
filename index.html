@@ -86,6 +86,80 @@
         .message-copy-btn {
             z-index: 100;
         }
+
+        /* تحسينات أزرار التبديل في الإعدادات */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+            z-index: 1;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .toggle-switch:hover .toggle-slider {
+            box-shadow: 0 0 3px #2196F3;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #2196F3;
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* تزيين عند التحويم */
+        .toggle-slider:after {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 34px;
+            background-color: rgba(33, 150, 243, 0);
+            transition: background-color 0.3s;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .toggle-switch:hover .toggle-slider:after {
+            background-color: rgba(33, 150, 243, 0.1);
+        }
     </style>
     
     <!-- تحميل المكتبات الخارجية أولاً -->
@@ -760,6 +834,73 @@
             observer.observe(chatMessages, { childList: true, subtree: true });
             console.log('تم تفعيل مراقبة المحادثة لتحديث المعادلات الرياضية');
         }
+    });
+
+    // إضافة معالجة لأزرار التبديل في الإعدادات
+    document.addEventListener('DOMContentLoaded', function() {
+        // دالة لتهيئة التبديلات في أي نافذة إعدادات
+        function setupToggleSwitches() {
+            console.log('تهيئة أزرار التبديل...');
+            
+            // البحث عن جميع أزرار التبديل (toggle switches) في الصفحة
+            const toggleSwitches = document.querySelectorAll('.toggle-switch');
+            
+            toggleSwitches.forEach(toggleSwitch => {
+                // إزالة معالجات الأحداث السابقة لتجنب التكرار
+                toggleSwitch.removeEventListener('click', toggleHandler);
+                
+                // إضافة معالج حدث جديد
+                toggleSwitch.addEventListener('click', toggleHandler);
+                
+                // تأكيد أن مؤشر المؤشر هو يد عند التحويم
+                toggleSwitch.style.cursor = 'pointer';
+            });
+            
+            // دالة معالجة النقر على التبديل
+            function toggleHandler(e) {
+                // تجنب تنفيذ السلوك الافتراضي
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // العثور على عنصر الإدخال (checkbox) داخل التبديل
+                const toggleInput = this.querySelector('input[type="checkbox"]');
+                
+                if (toggleInput) {
+                    // تبديل حالة الـ checkbox
+                    toggleInput.checked = !toggleInput.checked;
+                    
+                    // إطلاق حدث تغيير لتحديث المظهر المرئي
+                    toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    
+                    console.log(`تم تبديل الإعداد: ${toggleInput.id} إلى ${toggleInput.checked ? 'مفعل' : 'معطل'}`);
+                }
+            }
+        }
+        
+        // تهيئة التبديلات عند تحميل الصفحة
+        setupToggleSwitches();
+        
+        // مراقبة إضافة نافذة الإعدادات للصفحة
+        const bodyObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    // البحث عن نافذة الإعدادات في العناصر المضافة
+                    for (let i = 0; i < mutation.addedNodes.length; i++) {
+                        const node = mutation.addedNodes[i];
+                        if (node.nodeType === 1 && node.classList && node.classList.contains('settings-modal')) {
+                            // نافذة الإعدادات تم إضافتها، قم بتهيئة التبديلات بها
+                            setTimeout(setupToggleSwitches, 100);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+        
+        // بدء مراقبة إضافة عناصر إلى جسم الصفحة
+        bodyObserver.observe(document.body, { childList: true, subtree: false });
+        
+        console.log('تم تفعيل مراقبة إضافة نافذة الإعدادات');
     });
     </script>
 </body>
