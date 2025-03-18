@@ -3626,6 +3626,12 @@ body.keyboard-open .chat-input-container {
         align-items: center;
         justify-content: space-between;
         gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 950;
+        background: var(--background);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     
     .header-title {
@@ -3654,18 +3660,39 @@ body.keyboard-open .chat-input-container {
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 960;
     }
     
     .theme-toggle {
         width: 32px;
         height: 32px;
         padding: 6px;
+        z-index: 960;
+    }
+
+    /* إضافة مساحة للرسائل تحت الرأس الثابت */
+    .chat-messages {
+        padding-top: 60px !important;
+    }
+    
+    /* ضمان عدم تداخل الرأس مع المحتوى على الشاشات العمودية */
+    .main-content {
+        padding-top: 10px;
+    }
+    
+    /* تأكد من ظهور زر التبديل بشكل واضح فوق محتويات أخرى */
+    .sidebar-close-btn {
+        z-index: 970;
     }
 }
 
 @media (max-width: 480px) {
     .main-header {
         padding: 8px;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        right: 0;
     }
     
     .header-title h1 {
@@ -3680,5 +3707,10 @@ body.keyboard-open .chat-input-container {
         width: 28px;
         height: 28px;
         padding: 4px;
+    }
+    
+    /* مساحة إضافية للمحتوى حتى لا يُخفى تحت الرأس الثابت */
+    .main-content {
+        padding-top: 50px;
     }
 }
