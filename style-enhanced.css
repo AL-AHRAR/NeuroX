@@ -3087,46 +3087,97 @@ body[data-theme="light"] .code-body {
 
 /* ===== أنماط قائمة التحديث الجديد ===== */
 .update-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    backdrop-filter: blur(10px);
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1500 !important; /* قيمة عالية لكن لا تغطي العناصر المهمة */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    pointer-events: none !important; /* مهم: تسمح بالتفاعل مع العناصر خلفها */
 }
 
 .update-modal.active {
-    opacity: 1;
-    visibility: visible;
+    pointer-events: auto !important; /* تفعيل التفاعل عند ظهور النافذة */
 }
 
 .update-content {
-    background: linear-gradient(145deg, 
-        var(--bg-gradient-1, #1a1e2e) 0%, 
-        var(--bg-gradient-2, #252a3d) 100%);
-    border-radius: 24px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    color: var(--text-color, #fff);
-    position: relative;
-    animation: modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    transform: translateY(30px);
+    position: relative !important;
+    max-width: 90% !important;
+    max-height: 80vh !important;
+    width: 600px !important;
+    overflow-y: auto !important;
+    background: var(--card-bg) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2) !important;
+    padding: 20px !important;
+    pointer-events: auto !important; /* تمكين التفاعل مع المحتوى */
+    margin-top: 60px !important; /* إضافة هامش علوي لتجنب تغطية الرأس */
 }
 
-@keyframes modalSlideUp {
-    to { transform: translateY(0); }
+/* تأكيد ظهور الشريط الجانبي ورأسه */
+@media (max-width: 768px) {
+    .sidebar {
+        z-index: 2000 !important; /* أعلى من نافذة التحديث */
+    }
+
+    .sidebar-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 2010 !important; /* أعلى من الشريط الجانبي */
+        background: var(--sidebar-bg) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+        padding: 15px !important;
+    }
+
+    .sidebar-close-btn {
+        z-index: 2020 !important; /* أعلى من رأس الشريط الجانبي */
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* تأكيد ظهور رأس المنصة */
+    .main-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1980 !important;
+        background: var(--background) !important;
+    }
+    
+    /* ضمان عدم اختفاء الأزرار تحت نافذة التحديث */
+    .toggle-sidebar, .theme-toggle {
+        z-index: 1990 !important;
+        position: relative !important;
+    }
+}
+
+/* تعديلات خاصة للشاشات الصغيرة جدًا */
+@media (max-width: 480px) {
+    .update-content {
+        max-width: 95% !important;
+        margin-top: 50px !important; /* هامش أقل على الشاشات الصغيرة */
+    }
+    
+    .main-header {
+        position: fixed !important;
+        z-index: 1980 !important;
+    }
+    
+    .sidebar-header {
+        z-index: 2010 !important;
+    }
+    
+    /* جعل الازرار تظهر فوق نافذة التحديث */
+    .toggle-sidebar, .theme-toggle, .sidebar-close-btn {
+        position: relative !important;
+        z-index: 2500 !important; /* أعلى من كل شيء */
+    }
 }
 
 /* ===== رأس النافذة ===== */
