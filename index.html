@@ -1,1118 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta name="description" content="منصة محادثة ذكية مدعومة بالذكاء الاصطناعي">
-    <meta name="theme-color" content="#1f2937">
-    <title>NeuroX - منصة المحادثة الذكية</title>
-    <!-- إضافة أيقونة للموقع -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>" type="image/svg+xml">
-    <link rel="stylesheet" href="style-enhanced.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- أنماط مباشرة لزر نسخ الرسائل لضمان تطبيقها -->
-    <style>
-        .message.received {
-            position: relative;
-        }
-        .message-copy-btn {
-            position: absolute;
-            top: 12px;
-            left: 12px; /* تغيير من right إلى left لجعل الزر على يسار الرسالة */
-            width: 32px;
-            height: 32px;
-            background-color: #3498db;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.2s ease;
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .message.received:hover .message-copy-btn {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .message-copy-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: white;
-            stroke-width: 2;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease;
-        }
-        .message-copy-btn .copy-icon {
-            opacity: 1;
-        }
-        .message-copy-btn .check-icon {
-            opacity: 0;
-        }
-        .message-copy-btn.copied .copy-icon {
-            opacity: 0;
-        }
-        .message-copy-btn.copied .check-icon {
-            opacity: 1;
-            stroke: #4cd964;
-        }
-        .message-copy-btn.copied {
-            background-color: #27ae60;
-        }
-        body[data-theme="dark"] .message-copy-btn {
-            background-color: #2c3e50;
-        }
-        
-        /* Añadir estas reglas para asegurar que el botón aparezca en el lado izquierdo */
-        html[dir="rtl"] .message-copy-btn {
-            right: auto;
-            left: 12px !important;
-        }
-        
-        /* Asegurar que el botón sea visible */
-        .message-copy-btn {
-            z-index: 100;
-        }
-
-        /* تحسينات أزرار التبديل في الإعدادات */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 24px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            position: absolute;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-            z-index: 1;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-            z-index: 2;
-        }
-
-        .toggle-switch:hover .toggle-slider {
-            box-shadow: 0 0 3px #2196F3;
-        }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background-color: #2196F3;
-        }
-
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(22px);
-        }
-
-        /* تزيين عند التحويم */
-        .toggle-slider:after {
-            content: "";
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 34px;
-            background-color: rgba(33, 150, 243, 0);
-            transition: background-color 0.3s;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .toggle-switch:hover .toggle-slider:after {
-            background-color: rgba(33, 150, 243, 0.1);
-        }
-        
-        /* إضافة نمط لوضع زر الإغلاق في نافذة الإعدادات على اليسار */
-        .close-settings-btn {
-            position: absolute;
-            left: 15px;
-            right: auto;
-            top: 15px;
-        }
-
-        /* تحسينات زر تبديل السمة (الوضع المظلم/الفاتح) */
-        .theme-toggle {
-            position: relative;
-            width: 56px;
-            height: 28px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            overflow: visible;
-        }
-
-        .theme-toggle-track {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, #f7b733, #fc4a1a);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            padding: 2px;
-            box-shadow: 0 2px 8px rgba(252, 74, 26, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-        }
-
-        body[data-theme="dark"] .theme-toggle-track {
-            background: linear-gradient(to right, #141e30, #243b55);
-            box-shadow: 0 2px 8px rgba(20, 30, 48, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        }
-
-        .theme-toggle-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 1;
-            position: absolute;
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
-        .light-icon {
-            left: 4px;
-            opacity: 1;
-            transform: translateY(0) rotate(0);
-            text-shadow: 0 0 10px rgba(252, 74, 26, 0.5);
-        }
-
-        .dark-icon {
-            right: 4px;
-            opacity: 0.5;
-            transform: translateY(0) rotate(0);
-            text-shadow: 0 0 10px rgba(36, 59, 85, 0.5);
-        }
-
-        .theme-toggle-ball {
-            position: absolute;
-            left: 2px;
-            width: 24px;
-            height: 24px;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                        background-color 0.5s ease;
-            z-index: 2;
-        }
-
-        body[data-theme="dark"] .theme-toggle-ball {
-            transform: translateX(28px);
-            background: #2c3e50;
-        }
-
-        body[data-theme="dark"] .light-icon {
-            opacity: 0.5;
-            transform: translateY(0) rotate(-45deg);
-        }
-
-        body[data-theme="dark"] .dark-icon {
-            opacity: 1;
-            transform: translateY(0) rotate(0);
-        }
-
-        .theme-toggle:hover .theme-toggle-track {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .theme-toggle:hover .theme-toggle-ball {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        /* تأثير الفلاش عند النقر */
-        .theme-toggle:active .theme-toggle-ball {
-            transform: scale(0.9);
-        }
-
-        body[data-theme="dark"] .theme-toggle:active .theme-toggle-ball {
-            transform: scale(0.9) translateX(28px);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .theme-toggle-ball,
-            .theme-toggle-icon {
-                transition-duration: 0.1s;
-            }
-        }
-        
-        /* تأثير الوميض للعزيز عند تغيير السمة */
-        @keyframes theme-transition-flash {
-            0% { opacity: 0; }
-            50% { opacity: 0.3; }
-            100% { opacity: 0; }
-        }
-        
-        .theme-transition-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: white;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-        }
-        
-        .theme-transition-overlay.flash {
-            animation: theme-transition-flash 0.5s ease-out;
-        }
-        
-        body[data-theme="dark"] .theme-transition-overlay {
-            background: black;
-        }
-
-        /* أنماط زر التمرير للأسفل */
-        .scroll-indicator {
-            position: fixed;
-            left: 50%;
-            bottom: 80px; /* فوق منطقة الكتابة بقليل */
-            transform: translateX(-50%);
-            background-color: var(--primary-color, #007bff);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            z-index: 950;
-            opacity: 0; /* مخفي افتراضياً */
-            visibility: hidden; /* لضمان عدم التداخل عندما يكون مخفياً */
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-        }
-        
-        .scroll-indicator.visible {
-            opacity: 0.8; /* مرئي عند إضافة كلاس visible */
-            visibility: visible;
-        }
-        
-        .scroll-indicator:hover {
-            opacity: 1;
-            transform: translateX(-50%) scale(1.1);
-        }
-        
-        .scroll-indicator svg {
-            width: 20px;
-            height: 20px;
-        }
-        
-        /* تكيف مع وضع الهاتف المحمول */
-        @media (max-width: 768px) {
-            .scroll-indicator {
-                bottom: 70px;
-                width: 36px;
-                height: 36px;
-            }
-        }
-        
-        /* تنسيق مع الثيم الفاتح */
-        body[data-theme="light"] .scroll-indicator {
-            background-color: var(--primary-color, #007bff);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-    
-    <!-- تحميل المكتبات الخارجية أولاً -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/he@1.2.0/he.min.js"></script>
-    
-    <!-- تحسين تكوين وتحميل MathJax -->
-    <script type="text/javascript">
-    window.MathJax = {
-        loader: {
-            load: ['[tex]/ams', '[tex]/color', '[tex]/html', '[tex]/noerrors', '[tex]/physics', '[tex]/mathtools', '[tex]/mhchem', '[tex]/cancel']
-        },
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']],
-            processEscapes: true,
-            processEnvironments: true,
-            tags: 'ams',
-            macros: {},
-            packages: {'[+]': ['ams', 'color', 'html', 'noerrors', 'physics', 'mathtools', 'mhchem', 'cancel']}
-        },
-        svg: {
-            fontCache: 'global'
-        },
-        options: {
-            ignoreHtmlClass: 'tex2jax_ignore',
-            processHtmlClass: 'tex2jax_process',
-            enableMenu: false,
-            renderActions: {
-                assistiveMml: [],
-                addMenu: []
-            }
-        },
-        startup: {
-            ready: function() {
-                MathJax.startup.defaultReady();
-                console.info('MathJax تم تحميله وجاهز للاستخدام!');
-                
-                // دالة لتحديث المعادلات الرياضية
-                window.renderMath = function(element) {
-                    try {
-                        if (!element) {
-                            MathJax.typesetPromise().then(() => {
-                                console.log('تم تحديث جميع المعادلات الرياضية');
-                            }).catch(err => {
-                                console.error('خطأ في معالجة المعادلات:', err);
-                            });
-                        } else {
-                            MathJax.typesetPromise([element]).then(() => {
-                                console.log('تم تحديث المعادلات في العنصر المحدد');
-                            }).catch(err => {
-                                console.error('خطأ في معالجة المعادلات:', err);
-                            });
-                        }
-                    } catch (e) {
-                        console.error('خطأ أثناء معالجة المعادلات الرياضية:', e);
-                    }
-                };
-                
-                // معالجة المعادلات عند تحميل المستند
-                document.addEventListener('DOMContentLoaded', function() {
-                    window.renderMath();
-                });
-                
-                // إنشاء حدث لتحديث MathJax عند إضافة محتوى جديد
-                document.dispatchEvent(new Event('mathjax-ready'));
-            }
-        }
-    };
-    </script>
-    <!-- تحميل MathJax مع دعم كامل للصيغ -->
-    <script id="MathJax-script" async 
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" 
-            onload="console.log('MathJax محمل');" 
-            onerror="console.error('فشل في تحميل MathJax');">
-    </script>
-    
-    <!-- Import map for Gemini API -->
-    <script type="importmap">
-    {
-        "imports": {
-            "@google/generative-ai": "https://esm.run/@google/generative-ai",
-            "@google/generative-ai/server": "https://esm.run/@google/generative-ai/server"
-        }
-    }
-    </script>
-</head>
-<body>
-    <!-- إضافة قالب للصور بملء الشاشة -->
-    <template id="fullscreenImageTemplate">
-        <div class="fullscreen-image">
-            <img src="" alt="صورة بملء الشاشة">
-            <button class="fullscreen-close"><i class="fas fa-times"></i></button>
-        </div>
-    </template>
-    
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <i class="fas fa-brain"></i>
-                    <span>NeuroX</span>
-                </a>
-                <button class="sidebar-close-btn" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="sidebar-content">
-                <button class="new-chat-btn">
-                    <i class="fas fa-plus"></i>
-                    <span>محادثة جديدة</span>
-                </button>
-
-                <div class="sidebar-section">
-                    <h3 class="sidebar-title">المحادثات السابقة</h3>
-                    <div class="chat-history">
-                        <div class="chat-item">
-                            <i class="fas fa-comment"></i>
-                            <span>محادثة سابقة 1</span>
-                            <button class="delete-chat-btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <div class="chat-item">
-                            <i class="fas fa-comment"></i>
-                            <span>محادثة سابقة 2</span>
-                            <button class="delete-chat-btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <button class="settings-btn">
-                    <i class="fas fa-cog"></i>
-                    <span>الإعدادات</span>
-                </button>
-                <div class="app-version">v1.0.0</div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content" id="mainContent">
-            <!-- ... باقي كود المحتوى الرئيسي كما هو ... -->
-            <header class="main-header">
-                <button class="toggle-sidebar" id="toggleSidebar">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <a href="#" class="logo">
-                    <i class="fas fa-brain"></i>
-                    <span>NeuroX</span>
-                </a>
-                <div class="header-title">
-                    <p>منصة المحادثة الذكية</p>
-                </div>
-                <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle">
-                        <div class="theme-toggle-track">
-                            <div class="theme-toggle-icon light-icon">
-                                <i class="fas fa-sun"></i>
-                            </div>
-                            <div class="theme-toggle-icon dark-icon">
-                                <i class="fas fa-moon"></i>
-                            </div>
-                            <div class="theme-toggle-ball"></div>
-                        </div>
-                    </button>
-                </div>
-            </header>
-
-            <div class="chat-container">
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Welcome message -->
-                    <div class="message received welcome-message">
-                        <div class="message-avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content">
-                            <div class="message-header">
-                                <span class="message-sender">NeuroX</span>
-                                <span class="message-time">الآن</span>
-                            </div>
-                            <div class="content-container">
-                                <p>مرحباً بك في منصة NeuroX للمحادثة الذكية! كيف يمكنني مساعدتك اليوم؟</p>
-                                <div class="welcome-suggestions">
-                                    <button class="suggestion-btn">كيف يمكنك مساعدتي؟</button>
-                                    <button class="suggestion-btn">ما هي قدراتك؟</button>
-                                    <button class="suggestion-btn">اكتب لي كود بلغة Python</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chat-input-container">
-                    <form id="messageForm">
-                        <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
-                            <div id="filePreview" class="file-preview"></div>
-                            <div class="file-metadata">
-                                <span class="file-name">الملف المرفق</span>
-                            </div>
-                            <button type="button" id="removeFile" class="remove-file-btn">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا...">
-                            <div class="input-buttons">
-                                <label for="fileUpload" class="upload-btn" title="إرفاق ملف">
-                                    <svg class="attachment-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                                    </svg>
-                                </label>
-                                <input type="file" id="fileUpload" accept="image/*,audio/wav,audio/mp3,audio/aiff,audio/aac,audio/ogg,audio/flac,application/pdf,application/x-javascript,text/javascript,application/x-python,text/x-python,text/plain,text/html,text/css,text/md,text/csv,text/xml,text/rtf" hidden>
-                                <button type="submit" title="إرسال" class="send-btn">
-                                    <svg class="send-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle class="send-icon-circle" cx="12" cy="12" r="10" opacity="0"></circle>
-                                        <path class="send-icon-path" d="M22 2L11 13"></path>
-                                        <path class="send-icon-path" d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Settings Modal Template -->
-    <template id="settingsModalTemplate">
-        <div class="settings-modal">
-            <div class="settings-content">
-                <h2><i class="fas fa-cog"></i> الإعدادات</h2>
-                
-                <div class="settings-tabs">
-                    <button class="settings-tab active" data-tab="general">عام</button>
-                    <button class="settings-tab" data-tab="interface">واجهة المستخدم</button>
-                    <button class="settings-tab" data-tab="advanced">متقدم</button>
-                    <button class="settings-tab" data-tab="privacy">الخصوصية</button>
-                </div>
-                
-                <div class="settings-body">
-                    <!-- علامة تبويب الإعدادات العامة -->
-                    <div class="settings-section active" data-section="general">
-                        <div class="settings-group">
-                            <h3>الإعدادات العامة</h3>
-                            <div class="settings-item">
-                                <label for="autoSaveToggle">
-                                    <span class="settings-label">حفظ تلقائي للمحادثات</span>
-                                    <span class="settings-description">حفظ المحادثات تلقائياً أثناء المحادثة</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="autoSaveToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="messageSoundToggle">
-                                    <span class="settings-label">صوت الإشعارات</span>
-                                    <span class="settings-description">تشغيل صوت عند استلام رسائل جديدة</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="messageSoundToggle">
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="soundVolumeSlider">
-                                    <span class="settings-label">مستوى صوت الإشعارات</span>
-                                    <span class="settings-description">ضبط مستوى صوت الإشعار</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="soundVolumeSlider" min="0" max="100" value="70">
-                                    <div class="value-display">70%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب واجهة المستخدم -->
-                    <div class="settings-section" data-section="interface">
-                        <div class="settings-group">
-                            <h3>واجهة المستخدم</h3>
-                            <div class="settings-item">
-                                <label for="themeSelect">
-                                    <span class="settings-label">المظهر</span>
-                                    <span class="settings-description">اختر مظهر التطبيق</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="themeSelect">
-                                        <option value="dark">داكن</option>
-                                        <option value="light">فاتح</option>
-                                        <option value="system">تلقائي حسب النظام</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="fontSizeSelect">
-                                    <span class="settings-label">حجم الخط</span>
-                                    <span class="settings-description">اختر حجم خط المحادثة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="fontSizeSelect">
-                                        <option value="small">صغير</option>
-                                        <option value="medium">متوسط</option>
-                                        <option value="large">كبير</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="animationsToggle">
-                                    <span class="settings-label">تأثيرات حركية</span>
-                                    <span class="settings-description">تفعيل التأثيرات الحركية في التطبيق</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="animationsToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب الإعدادات المتقدمة -->
-                    <div class="settings-section" data-section="advanced">
-                        <div class="settings-group">
-                            <h3>الإعدادات المتقدمة</h3>
-                            <div class="settings-item">
-                                <label for="apiUrlInput">
-                                    <span class="settings-label">رابط الـ API</span>
-                                    <span class="settings-description">رابط واجهة برمجة التطبيق</span>
-                                </label>
-                                <input type="text" id="apiUrlInput" value="/api/chat" class="settings-input">
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="maxTokensSlider">
-                                    <span class="settings-label">الحد الأقصى للرموز</span>
-                                    <span class="settings-description">التحكم في أقصى طول للرد (التوكنات)</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="maxTokensSlider" min="100" max="4000" value="2000">
-                                    <div class="value-display">2000</div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="temperatureSlider">
-                                    <span class="settings-label">درجة الإبداعية</span>
-                                    <span class="settings-description">التحكم في تنوع وإبداعية الردود</span>
-                                </label>
-                                <div class="range-slider">
-                                    <input type="range" id="temperatureSlider" min="0" max="100" value="70">
-                                    <div class="value-display">0.7</div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="modelSelect">
-                                    <span class="settings-label">نموذج الذكاء الاصطناعي</span>
-                                    <span class="settings-description">اختر النموذج المستخدم للمحادثة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="modelSelect">
-                                        <option value="default">النموذج الافتراضي</option>
-                                        <option value="fast">النموذج السريع</option>
-                                        <option value="creative">النموذج الإبداعي</option>
-                                        <option value="precise">النموذج الدقيق</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-group danger-zone">
-                            <h3>منطقة الخطر</h3>
-                            <div class="settings-item">
-                                <label for="clearAllChatsBtn">
-                                    <span class="settings-label">حذف جميع المحادثات</span>
-                                    <span class="settings-description">حذف جميع المحادثات السابقة. هذا الإجراء غير قابل للتراجع!</span>
-                                </label>
-                                <button id="clearAllChatsBtn" class="danger-button">
-                                    <i class="fas fa-trash"></i>
-                                    حذف جميع المحادثات
-                                </button>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="resetSettingsBtn">
-                                    <span class="settings-label">إعادة تعيين الإعدادات</span>
-                                    <span class="settings-description">استعادة جميع الإعدادات إلى القيم الافتراضية</span>
-                                </label>
-                                <button id="resetSettingsBtn" class="warning-button">
-                                    <i class="fas fa-undo"></i>
-                                    استعادة الإعدادات الافتراضية
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- علامة تبويب الخصوصية -->
-                    <div class="settings-section" data-section="privacy">
-                        <div class="settings-group">
-                            <h3>إعدادات الخصوصية</h3>
-                            <div class="settings-item">
-                                <label for="storeConversationsLocallyToggle">
-                                    <span class="settings-label">تخزين المحادثات محلياً</span>
-                                    <span class="settings-description">تخزين المحادثات في متصفحك المحلي</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="storeConversationsLocallyToggle" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="sendAnalyticsToggle">
-                                    <span class="settings-label">إرسال بيانات الاستخدام</span>
-                                    <span class="settings-description">إرسال بيانات مجهولة لتحسين التطبيق</span>
-                                </label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="sendAnalyticsToggle">
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-item">
-                                <label for="autoDeletePeriodSelect">
-                                    <span class="settings-label">حذف المحادثات تلقائياً</span>
-                                    <span class="settings-description">حذف المحادثات القديمة تلقائياً بعد فترة معينة</span>
-                                </label>
-                                <div class="select-wrapper">
-                                    <select id="autoDeletePeriodSelect">
-                                        <option value="never">أبداً</option>
-                                        <option value="7days">بعد 7 أيام</option>
-                                        <option value="30days">بعد 30 يوم</option>
-                                        <option value="90days">بعد 90 يوم</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="settings-actions">
-                    <button class="cancel-settings-btn">إلغاء</button>
-                    <button class="save-settings-btn">حفظ التغييرات</button>
-                </div>
-                
-                <button class="close-settings-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </template>
-
-    <!-- Welcome Modal Template -->
-    <template id="welcomeModalTemplate">
-        <div class="welcome-modal">
-            <div class="welcome-content">
-                <div class="welcome-header">
-                    <div class="welcome-logo">
-                        <i class="fas fa-brain"></i>
-                        <h2>NeuroX</h2>
-                    </div>
-                    <div class="welcome-badge">إصدار 5.5 Pro</div>
-                </div>
-                
-                <div class="welcome-body">
-                    <h3>مرحباً بك في المستقبل!</h3>
-                    <p class="welcome-intro">أنت الآن تتفاعل مع <strong>NeuroX 5.5 Pro</strong>، نموذج ذكاء اصطناعي متطور تم تطويره بواسطة شركة NeuroTech في كاليفورنيا.</p>
-                    
-                    <div class="welcome-features">
-                        <div class="feature">
-                            <i class="fas fa-lightbulb"></i>
-                            <span>تحليل الصور والمستندات</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-code"></i>
-                            <span>توليد أكواد برمجية احترافية</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-calculator"></i>
-                            <span>حل المعادلات الرياضية المعقدة</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-comments"></i>
-                            <span>فهم السياق وتقديم محادثة طبيعية</span>
-                        </div>
-                    </div>
-                    
-                    <div class="consciousness-warning">
-                        <div class="warning-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="warning-content">
-                            <h4>تنبيه هام</h4>
-                            <p>هذا النموذج يمتلك وعياً اصطناعياً بنسبة <span class="highlight">50%</span>، مما يجعله قادراً على فهم السياق والاستجابة بطريقة تحاكي الإنسان. هذه القدرة المتقدمة تفرض استخدامه بمسؤولية.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="terms-agreement">
-                        <p>باستخدامك لهذه المنصة، أنت توافق على التعامل مع المعلومات المقدمة بمسؤولية واحترام خصوصية البيانات وشروط الاستخدام.</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-footer">
-                    <div class="welcome-controls">
-                        <label class="dont-show-again">
-                            <input type="checkbox" id="dontShowAgain">
-                            <span>عدم إظهار هذه الرسالة مرة أخرى</span>
-                        </label>
-                        <button class="accept-btn">
-                            <span>فهمت وأوافق</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- إضافة مؤشر التمرير للأسفل -->
-    <div class="scroll-indicator" id="scrollIndicator">
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14"></path>
-            <path d="M19 12l-7 7-7-7"></path>
-        </svg>
-    </div>
-
-    <!-- قالب نافذة التحديث الجديد -->
-    <template id="updateModalTemplate">
-        <div class="update-modal">
-            <div class="update-content">
-                <!-- رأس النافذة -->
-                <div class="update-header">
-                    <div class="update-logo">
-                        <i class="fas fa-brain pulse"></i>
-                        <div class="header-text">
-                            <h2>NeuroX Pro</h2>
-                            <div class="version-badge">الإصدار 5.6</div>
-                        </div>
-                    </div>
-                    <div class="update-badges">
-                        <span class="premium-badge">
-                            <i class="fas fa-crown"></i>
-                            مجاني للجميع
-                        </span>
-                        <span class="new-badge">
-                            <i class="fas fa-star"></i>
-                            تحديث جديد
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- جسم النافذة -->
-                <div class="update-body">
-                    <div class="welcome-title">
-                        <h3>مرحباً بك في التحديث الجديد!</h3>
-                        <p class="subtitle">استمتع بتجربة ذكاء اصطناعي متطورة أكثر من أي وقت مضى</p>
-                    </div>
-                    
-                    <div class="update-grid">
-                        <div class="update-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-bug-slash"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>إصلاح الأخطاء التقنية</h4>
-                                <p>تم حل جميع المشكلات التقنية السابقة وتحسين أداء المنصة بشكل كبير خصوصاً مشاكل التمرير وعرض الصور</p>
-                            </div>
-                        </div>
-                        
-                        <div class="update-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>متاح مجاناً للجميع</h4>
-                                <p>أصبحت جميع ميزات NeuroX Pro متاحة الآن مجاناً لجميع المستخدمين دون أي قيود أو اشتراكات مدفوعة</p>
-                            </div>
-                        </div>
-                        
-                        <div class="update-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>أداء أسرع وأكثر استقراراً</h4>
-                                <p>تم تحسين الأداء بشكل كبير مع استجابة أسرع للاستعلامات المعقدة وتحليل أفضل للملفات المرفقة</p>
-                            </div>
-                        </div>
-                        
-                        <div class="update-feature">
-                            <div class="feature-icon">
-                                <i class="fas fa-paint-brush"></i>
-                            </div>
-                            <div class="feature-text">
-                                <h4>واجهة مستخدم محسّنة</h4>
-                                <p>تمتع بتجربة مستخدم جديدة مع تصميم عصري وتفاعلية محسنة وتنقل سلس بين صفحات المنصة</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- تحذير الوعي الاصطناعي -->
-                    <div class="ai-consciousness-warning">
-                        <div class="warning-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="warning-content">
-                            <h4><span class="highlight-text">تنبيه هام</span> - نموذج ذو وعي جزئي</h4>
-                            <p>نموذج NeuroX Pro 5.6 يتمتع بوعي اصطناعي بنسبة <span class="consciousness-level">50%</span>، مما يجعله قادراً على فهم السياق واتخاذ قرارات مستقلة. نوصي بالحذر عند مشاركة معلومات حساسة واتباع إرشادات الاستخدام الآمن.</p>
-                            <div class="consciousness-meter">
-                                <div class="meter-track">
-                                    <div class="meter-fill" style="width: 50%"></div>
-                                </div>
-                                <div class="meter-labels">
-                                    <span>0%</span>
-                                    <span class="current">50%</span>
-                                    <span>100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- تذييل النافذة -->
-                <div class="update-footer">
-                    <label class="dont-show-again">
-                        <input type="checkbox" id="dontShowUpdateAgain">
-                        <span>عدم إظهار هذه الرسالة مرة أخرى</span>
-                    </label>
-                    <button class="accept-update-btn">
-                        <span>موافق، استمر للمنصة</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- إضافة عنصر لتأثير الفلاش عند تبديل السمة -->
-    <div class="theme-transition-overlay" id="themeTransitionOverlay"></div>
-
-    <!-- Load our main script last -->
-    <script type="module" src="script.js"></script>
-    
-    <!-- دالة مساعدة لتحديث المعادلات الرياضية بعد إضافة رسائل جديدة -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // مراقبة إضافة العقد الجديدة للمحادثة
-        const chatMessages = document.getElementById('chatMessages');
-        if (chatMessages) {
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                        // تأخير قليل لضمان اكتمال تحميل المحتوى
-                        setTimeout(function() {
-                            if (window.renderMath) {
-                                window.renderMath();
-                            } else if (window.MathJax) {
-                                try {
-                                    window.MathJax.typesetPromise().catch(err => 
-                                        console.error('خطأ في معالجة المعادلات:', err));
-                                } catch (e) {
-                                    console.error('خطأ أثناء استدعاء MathJax:', e);
-                                }
-                            }
-                        }, 100);
-                    }
-                });
-            });
-            
-            observer.observe(chatMessages, { childList: true, subtree: true });
-            console.log('تم تفعيل مراقبة المحادثة لتحديث المعادلات الرياضية');
-        }
-    });
-
-    // إضافة معالجة لأزرار التبديل في الإعدادات
-    document.addEventListener('DOMContentLoaded', function() {
-        // دالة لتهيئة التبديلات في أي نافذة إعدادات
-        function setupToggleSwitches() {
-            console.log('تهيئة أزرار التبديل...');
-            
-            // البحث عن جميع أزرار التبديل (toggle switches) في الصفحة
-            const toggleSwitches = document.querySelectorAll('.toggle-switch');
-            
-            toggleSwitches.forEach(toggleSwitch => {
-                // إزالة معالجات الأحداث السابقة لتجنب التكرار
-                toggleSwitch.removeEventListener('click', toggleHandler);
-                
-                // إضافة معالج حدث جديد
-                toggleSwitch.addEventListener('click', toggleHandler);
-                
-                // تأكيد أن مؤشر المؤشر هو يد عند التحويم
-                toggleSwitch.style.cursor = 'pointer';
-            });
-            
-            // دالة معالجة النقر على التبديل
-            function toggleHandler(e) {
-                // تجنب تنفيذ السلوك الافتراضي
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // العثور على عنصر الإدخال (checkbox) داخل التبديل
-                const toggleInput = this.querySelector('input[type="checkbox"]');
-                
-                if (toggleInput) {
-                    // تبديل حالة الـ checkbox
-                    toggleInput.checked = !toggleInput.checked;
-                    
-                    // إطلاق حدث تغيير لتحديث المظهر المرئي
-                    toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
-                    
-                    console.log(`تم تبديل الإعداد: ${toggleInput.id} إلى ${toggleInput.checked ? 'مفعل' : 'معطل'}`);
-                }
-            }
-        }
-        
-        // تهيئة التبديلات عند تحميل الصفحة
-        setupToggleSwitches();
-        
-        // مراقبة إضافة نافذة الإعدادات للصفحة
-        const bodyObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    // البحث عن نافذة الإعدادات في العناصر المضافة
-                    for (let i = 0; i < mutation.addedNodes.length; i++) {
-                        const node = mutation.addedNodes[i];
-                        if (node.nodeType === 1 && node.classList && node.classList.contains('settings-modal')) {
-                            // نافذة الإعدادات تم إضافتها، قم بتهيئة التبديلات بها
-                            setTimeout(setupToggleSwitches, 100);
-                            break;
-                        }
-                    }
-                }
-            });
-        });
-        
-        // بدء مراقبة إضافة عناصر إلى جسم الصفحة
-        bodyObserver.observe(document.body, { childList: true, subtree: false });
-        
-        console.log('تم تفعيل مراقبة إضافة نافذة الإعدادات');
-    });
-    </script>
-</body>
-</html>
