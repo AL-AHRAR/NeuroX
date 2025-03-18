@@ -3618,3 +3618,67 @@ body.keyboard-open .chat-input-container {
         padding-bottom: 120px !important;
     }
 }
+
+@media (max-width: 768px) {
+    .main-header {
+        padding: 12px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    
+    .header-title {
+        flex: 1;
+    }
+    
+    .header-title h1 {
+        font-size: 18px;
+        margin: 0;
+    }
+    
+    .header-title p {
+        font-size: 12px;
+        margin: 0;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .toggle-sidebar {
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .theme-toggle {
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 8px;
+    }
+    
+    .header-title h1 {
+        font-size: 16px;
+    }
+    
+    .header-title p {
+        display: none;
+    }
+    
+    .toggle-sidebar, .theme-toggle {
+        width: 28px;
+        height: 28px;
+        padding: 4px;
+    }
+}
