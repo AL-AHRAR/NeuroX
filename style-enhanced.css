@@ -517,18 +517,18 @@ body[data-theme="light"] .message.sent .message-avatar {
     margin-right: auto;
     padding-left: 0;
     padding-right: 15px;
+    max-width: 90%; /* قيمة افتراضية معقولة */
 }
 
 .message.received .message-content {
     background: linear-gradient(135deg, #2c3e50 0%, #1c2e40 100%);
     border-radius: 4px 18px 18px 18px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 12px 15px;
-    max-width: calc(100% - 40px);
+    max-width: 100%; /* ضمان عدم التجاوز */
+    overflow-wrap: break-word; /* تقسيم الكلمات الطويلة */
+    word-break: break-word; /* تقسيم النصوص */
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .message.received:hover .message-content {
@@ -4302,5 +4302,73 @@ body[data-theme="light"] .message.received .content-container {
     
     .sidebar-content {
         height: calc(100vh - 55px - 50px) !important; /* تعديل الارتفاع للشاشات الصغيرة */
+    }
+}
+
+/* تحسين عرض الرسائل المستلمة - الإصلاح الرئيسي */
+.message.received {
+    margin-left: 0;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 15px;
+    max-width: 90%; /* قيمة افتراضية معقولة */
+}
+
+.message.received .message-content {
+    background: linear-gradient(135deg, #2c3e50 0%, #1c2e40 100%);
+    border-radius: 4px 18px 18px 18px;
+    padding: 12px 15px;
+    max-width: 100%; /* ضمان عدم التجاوز */
+    overflow-wrap: break-word; /* تقسيم الكلمات الطويلة */
+    word-break: break-word; /* تقسيم النصوص */
+    position: relative;
+    overflow: hidden;
+}
+
+/* تحسينات للهواتف */
+@media (max-width: 768px) {
+    .message.received {
+        max-width: 75%; /* تقليل العرض للهواتف */
+        margin: 8px 0; /* مسافات متساوية */
+    }
+
+    .message.received .message-content {
+        max-width: 100%; /* ضمان ملائمة العرض */
+        max-height: 300px; /* حد أقصى للارتفاع */
+        overflow-y: auto; /* تمرير داخلي إذا كان المحتوى طويلًا */
+        padding: 10px 12px; /* تقليل الحشوة */
+        font-size: 0.9rem; /* تقليل حجم الخط قليلاً */
+        scrollbar-width: thin; /* شريط تمرير رفيع */
+    }
+
+    /* تحسين التمرير الداخلي للحاوية */
+    .message.received .message-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .message.received .message-content::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+    }
+
+    /* ضمان ظهور المحتوى الطويل بشكل صحيح */
+    .message.received .content-container {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        line-height: 1.4; /* تحسين القراءة */
+    }
+}
+
+/* للشاشات الصغيرة جدًا */
+@media (max-width: 480px) {
+    .message.received {
+        max-width: 70%; /* تقليل العرض أكثر */
+    }
+
+    .message.received .message-content {
+        max-height: 250px; /* تقليل الارتفاع الأقصى */
+        padding: 8px 10px;
+        font-size: 0.85rem; /* حجم خط أصغر */
     }
 }
