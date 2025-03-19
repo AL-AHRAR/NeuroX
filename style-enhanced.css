@@ -4425,3 +4425,133 @@ body[data-theme="light"] .message.received .content-container {
         font-size: 0.85rem; /* حجم خط أصغر */
     }
 }
+
+/* إصلاح جذري لمشكلة عرض الرسائل على الهواتف - حل مشكلة الرسائل المقطوعة */
+
+/* إعادة ضبط حاوية المحادثة ومنطقة الرسائل للهواتف */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 100% !important;
+        overflow-x: hidden !important; /* منع التمرير الأفقي للحاوية الرئيسية */
+    }
+    
+    .chat-messages {
+        width: 100% !important;
+        overflow-x: hidden !important; /* منع التمرير الأفقي لمنطقة الرسائل */
+        padding: 1rem !important; /* تقليل الهوامش للاستفادة من المساحة */
+    }
+}
+
+/* إصلاح نهائي للرسائل - تنسيق موحد وبسيط */
+.message {
+    width: auto !important; 
+    max-width: 85% !important; /* حد أقصى للعرض */
+    box-sizing: border-box !important;
+    position: relative !important;
+    clear: both !important; /* منع تداخل الرسائل */
+    overflow: visible !important; /* السماح بظهور المحتوى */
+    display: flex !important;
+    margin: 10px 0 !important;
+}
+
+/* للهواتف تقليل المساحة القصوى */
+@media (max-width: 768px) {
+    .message {
+        max-width: 75% !important;
+    }
+    
+    /* تصغير الرسائل أكثر على الشاشات الصغيرة جدًا */
+    @media (max-width: 480px) {
+        .message {
+            max-width: 65% !important;
+        }
+    }
+}
+
+/* توجيه الرسائل المرسلة */
+.message.sent {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    float: right !important; /* تثبيت موضع الرسائل المرسلة */
+    flex-direction: row-reverse !important;
+}
+
+/* توجيه الرسائل المستلمة */
+.message.received {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    float: left !important; /* تثبيت موضع الرسائل المستلمة */
+    flex-direction: row !important;
+}
+
+/* تعديل محتوى الرسائل لضمان ظهوره بالكامل */
+.message-content {
+    width: auto !important;
+    min-width: 0 !important; /* مهم جدًا للـ flexbox */
+    max-width: calc(100% - 45px) !important; /* مساحة للأفاتار */
+    box-sizing: border-box !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important; 
+}
+
+/* تقليل المساحة بين الأفاتار والمحتوى على الهواتف */
+@media (max-width: 768px) {
+    .message.sent {
+        padding-left: 5px !important;
+    }
+    
+    .message.received {
+        padding-right: 5px !important;
+    }
+    
+    .message-content {
+        max-width: calc(100% - 35px) !important; /* تقليل المساحة على الهواتف */
+    }
+}
+
+/* تأكيد على خصائص الحاوية الداخلية للمحتوى */
+.content-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+}
+
+/* تحسين التعامل مع المحتوى الخاص (كود، جداول، صور) */
+.message img,
+.message video,
+.message iframe,
+.message .code-container,
+.message pre,
+.message table {
+    max-width: 100% !important;
+    width: auto !important;
+    overflow-x: auto !important;
+}
+
+/* دعم اللغة العربية (RTL) */
+html[dir="rtl"] .message.sent {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    float: left !important;
+    flex-direction: row !important;
+}
+
+html[dir="rtl"] .message.received {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    float: right !important;
+    flex-direction: row-reverse !important;
+}
+
+/* معالجة شريط التمرير للمحتوى الطويل */
+.message-content::-webkit-scrollbar {
+    width: 3px !important;
+    height: 3px !important;
+}
+
+.message-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 3px !important;
+}
