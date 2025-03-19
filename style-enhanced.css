@@ -429,42 +429,31 @@ body[data-theme="light"] .chat-messages {
 .message {
     display: flex;
     margin: 10px 0;
-    max-width: 90%;
+    max-width: 90%; /* قيمة افتراضية */
     position: relative;
-    transition: all 0.3s ease;
 }
 
-.message:hover {
-    z-index: 10;
-}
-
-/* تحسين رسائل المستخدم */
 .message.sent {
     margin-right: 0;
     margin-left: auto;
     flex-direction: row-reverse;
-    padding-right: 0;
-    padding-left: 15px;
 }
 
-.message.sent .message-content {
-    background: linear-gradient(135deg, #2d65c9 0%, #1e4fc0 100%);
-    border-radius: 18px 4px 18px 18px;
-    box-shadow: 0 3px 12px rgba(18, 55, 105, 0.25), 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 12px 15px;
-    max-width: calc(100% - 40px);
+.message.received {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.message-content {
+    max-width: 100%; /* ضمان عدم التجاوز */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    overflow-x: auto; /* السماح بالتمرير الأفقي إذا لزم الأمر */
+    overflow-y: auto; /* السماح بالتمرير العمودي */
     position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* ضمان احتساب الحشوة ضمن العرض */
 }
 
-.message.sent:hover .message-content {
-    box-shadow: 0 5px 15px rgba(18, 55, 105, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-}
-
-/* صندوق رسالة المستخدم - الثيم الفاتح */
 body[data-theme="light"] .message.sent .message-content {
     background: linear-gradient(135deg, #3273dc 0%, #2366d1 100%);
     box-shadow: 0 3px 12px rgba(50, 115, 220, 0.2), 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -475,8 +464,7 @@ body[data-theme="light"] .message.sent:hover .message-content {
     box-shadow: 0 5px 15px rgba(50, 115, 220, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* تأثير وهج خلفي للرسالة */
-.message.sent .message-content::before {
+body[data-theme="light"] .message.sent .message-content::before {
     content: "";
     position: absolute;
     top: 0;
@@ -487,56 +475,12 @@ body[data-theme="light"] .message.sent:hover .message-content {
     z-index: -1;
 }
 
-/* تعديل أفاتار المستخدم */
-.message.sent .message-avatar {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-right: 8px;
-    background: linear-gradient(135deg, #3273dc, #2366d1);
-    color: white;
-    font-size: 1rem;
-    box-shadow: 0 2px 8px rgba(18, 55, 105, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* أفاتار المستخدم - الثيم الفاتح */
 body[data-theme="light"] .message.sent .message-avatar {
     background: linear-gradient(135deg, #4a89dc, #3273dc);
     box-shadow: 0 2px 8px rgba(50, 115, 220, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-/* تعديل رسائل المستلمة (من الروبوت) */
-.message.received {
-    margin-left: 0;
-    margin-right: auto;
-    padding-left: 0;
-    padding-right: 15px;
-    max-width: 90%; /* قيمة افتراضية معقولة */
-}
-
-.message.received .message-content {
-    background: linear-gradient(135deg, #2c3e50 0%, #1c2e40 100%);
-    border-radius: 4px 18px 18px 18px;
-    padding: 12px 15px;
-    max-width: 100%; /* ضمان عدم التجاوز */
-    overflow-wrap: break-word; /* تقسيم الكلمات الطويلة */
-    word-break: break-word; /* تقسيم النصوص */
-    position: relative;
-    overflow: hidden;
-}
-
-.message.received:hover .message-content {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-}
-
-/* صندوق رسالة الروبوت - الثيم الفاتح */
 body[data-theme="light"] .message.received .message-content {
     background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -548,48 +492,19 @@ body[data-theme="light"] .message.received:hover .message-content {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* تفاصيل رسالة الروبوت */
-.message.received .message-header {
+body[data-theme="light"] .message.received .message-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 4px;
 }
 
-.message.received .message-sender {
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
 body[data-theme="light"] .message.received .message-sender {
     color: #333;
 }
 
-.message.received .message-time {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.75rem;
-}
-
 body[data-theme="light"] .message.received .message-time {
     color: rgba(0, 0, 0, 0.5);
-}
-
-/* أفاتار الروبوت */
-.message.received .message-avatar {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-left: 8px;
-    background: linear-gradient(135deg, #d35400, #e67e22);
-    color: white;
-    font-size: 1rem;
-    box-shadow: 0 2px 8px rgba(211, 84, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 body[data-theme="light"] .message.received .message-avatar {
