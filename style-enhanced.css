@@ -4245,3 +4245,62 @@ body[data-theme="light"] .message.received .content-container {
         max-width: 320px !important;
     }
 }
+
+/* إصلاح مشكلة اختفاء رأس الشريط الجانبي على الهواتف */
+@media (max-width: 768px) {
+    /* تحسين تموضع الشريط الجانبي */
+    .sidebar {
+        z-index: 1000 !important; /* أولوية عالية */
+        position: fixed !important; /* تثبيت الموضع */
+        top: 0 !important;
+        height: 100vh !important;
+    }
+
+    /* ضمان ظهور رأس الشريط الجانبي دائمًا */
+    .sidebar-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1010 !important; /* أعلى من المحتوى */
+        background: linear-gradient(135deg, #1a2233 0%, #121a29 100%) !important;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        min-height: 60px !important; /* ارتفاع ثابت */
+    }
+
+    /* نمط الرأس للوضع الفاتح */
+    body[data-theme="light"] .sidebar-header {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%) !important;
+    }
+
+    /* تحسين عرض المحتوى */
+    .sidebar-content {
+        height: calc(100vh - 60px - 60px) !important; /* المساحة المتبقية بعد الرأس والتذييل */
+        overflow-y: auto !important;
+        padding-top: 0.5rem !important;
+    }
+
+    /* ضمان ظهور الشعار وزر الإغلاق */
+    .sidebar .logo,
+    .sidebar-close-btn {
+        z-index: 1020 !important; /* أعلى من الرأس */
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* ضمان أن المحتوى لا يتداخل مع الرأس عند التمرير */
+    .chat-history {
+        padding-top: 0.5rem !important;
+    }
+}
+
+/* تحسينات إضافية للشاشات الأصغر */
+@media (max-width: 480px) {
+    .sidebar-header {
+        padding: 1rem !important;
+    }
+    
+    .sidebar-content {
+        height: calc(100vh - 55px - 50px) !important; /* تعديل الارتفاع للشاشات الصغيرة */
+    }
+}
