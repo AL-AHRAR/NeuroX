@@ -4555,3 +4555,206 @@ html[dir="rtl"] .message.received {
     background: rgba(255, 255, 255, 0.2) !important;
     border-radius: 3px !important;
 }
+
+/* إصلاح تفاعل الشريط الجانبي مع المحتوى على الهواتف */
+
+/* تحسين العلاقة بين الشريط الجانبي والمحتوى الرئيسي على الهواتف */
+@media (max-width: 768px) {
+    /* إعادة ضبط أساسيات التخطيط للتطبيق بأكمله */
+    .app-container {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        overflow: hidden !important;
+        position: relative !important;
+        height: 100vh !important;
+    }
+
+    /* جعل المحتوى الرئيسي يأخذ كامل المساحة المتاحة */
+    .main-content {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+        transition: transform 0.3s ease !important;
+        flex: 1 !important;
+    }
+
+    /* سلوك الشريط الجانبي المغلق والمفتوح */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
+        width: 85% !important; /* تخفيض العرض لتجنب تغطية كامل الشاشة */
+        max-width: 300px !important;
+        z-index: 9000 !important; /* أعلى من المحتوى الرئيسي */
+        transform: translateX(-100%) !important; /* مخفي افتراضيًا */
+        transition: transform 0.3s ease !important;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
+        overflow: hidden !important;
+    }
+
+    /* حالة فتح الشريط الجانبي */
+    .sidebar:not(.closed) {
+        transform: translateX(0) !important;
+    }
+
+    /* تضليل خلفية الشاشة عند فتح الشريط الجانبي - مهم جدًا */
+    body:has(.sidebar:not(.closed))::after {
+        content: "" !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: 8999 !important; /* أقل من الشريط الجانبي */
+        pointer-events: auto !important; /* للسماح بالنقر لإغلاق الشريط الجانبي */
+    }
+    
+    /* دعم RTL للشريط الجانبي */
+    html[dir="rtl"] .sidebar {
+        left: auto !important;
+        right: 0 !important;
+        transform: translateX(100%) !important;
+    }
+    
+    html[dir="rtl"] .sidebar:not(.closed) {
+        transform: translateX(0) !important;
+    }
+
+    /* تحسين حجم وشكل أزرار الشريط الجانبي */
+    .sidebar-header {
+        padding: 1rem !important;
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .sidebar-close-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* تحسين محتوى الشريط الجانبي */
+    .sidebar-content {
+        height: calc(100vh - 70px - 50px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important; /* تحسين التمرير على iOS */
+        padding: 0.75rem !important;
+    }
+    
+    /* تحسين أقسام الشريط الجانبي */
+    .sidebar-section {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* تحسين زر التبديل */
+    .toggle-sidebar {
+        margin-right: 0.5rem !important;
+        width: 38px !important;
+        height: 38px !important;
+    }
+}
+
+/* معالجة مشكلة رسائل المحادثة عند التفاعل مع الشريط الجانبي */
+@media (max-width: 768px) {
+    /* ضمان عدم تأثر رسائل المحادثة بالشريط الجانبي */
+    .chat-messages {
+        width: 100% !important;
+        overflow-x: hidden !important;
+        padding: 1rem !important;
+    }
+    
+    /* تأكيد عدم خروج الرسائل خارج الحاوية */
+    .message {
+        width: auto !important;
+        max-width: 75% !important;
+        clear: both !important;
+        margin: 8px 0 !important;
+    }
+    
+    /* تقليل الهوامش للاستفادة من مساحة الشاشة */
+    .message.sent {
+        margin-left: auto !important;
+        margin-right: 2px !important;
+    }
+    
+    .message.received {
+        margin-right: auto !important;
+        margin-left: 2px !important;
+    }
+    
+    /* تقليل حجم محتوى الرسائل ليناسب شاشة الهاتف */
+    .message-content {
+        max-width: calc(100% - 40px) !important;
+        font-size: 0.9rem !important;
+        padding: 10px !important;
+    }
+    
+    /* تصغير الأفاتار على الهواتف */
+    .message-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+    }
+}
+
+/* لشاشات الهواتف الصغيرة جدًا */
+@media (max-width: 480px) {
+    /* تقليل عرض الشريط الجانبي */
+    .sidebar {
+        width: 90% !important;
+        max-width: 280px !important;
+    }
+    
+    /* تصغير رأس الشريط الجانبي */
+    .sidebar-header {
+        padding: 0.75rem !important;
+    }
+    
+    /* تقليص حجم الشعار */
+    .logo {
+        font-size: 1.25rem !important;
+    }
+    
+    /* تقليص عرض الرسائل */
+    .message {
+        max-width: 85% !important;
+    }
+    
+    /* تقليص أحجام الأفاتار أكثر */
+    .message-avatar {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+    }
+    
+    /* تقليص محتوى الرسائل */
+    .message-content {
+        max-width: calc(100% - 35px) !important;
+        padding: 8px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* تحسين أساسي للـ viewport على الهواتف - مهم جدًا */
+@media (max-width: 768px) {
+    /* إعلام المتصفح بضبط المقياس الفعلي للمحتوى */
+    :root {
+        --viewport-scale: 1 !important;
+        --sidebar-width: 0px !important; /* عند إغلاق الشريط الجانبي */
+    }
+    
+    /* تحسين التصغير/التكبير على الهواتف */
+    html, body {
+        -webkit-text-size-adjust: 100% !important;
+        -moz-text-size-adjust: 100% !important;
+        -ms-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
+    }
+}
