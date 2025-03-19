@@ -4758,3 +4758,142 @@ html[dir="rtl"] .message.received {
         text-size-adjust: 100% !important;
     }
 }
+
+/* تعديلات نهائية لحل المشاكل المتبقية */
+
+/* 1. ترتيب الظهور - رسالة التحديث أولاً ثم الشريط الجانبي */
+.update-modal {
+    z-index: 9999 !important; /* أعلى من أي شيء آخر */
+}
+
+.sidebar {
+    z-index: 9000 !important; /* أقل من رسالة التحديث */
+}
+
+/* 2. إلغاء شريط التمرير الداخلي في رسائل النموذج */
+.message-content {
+    overflow-y: visible !important; /* إلغاء التمرير العمودي */
+    max-height: none !important; /* إلغاء الحد الأقصى للارتفاع */
+}
+
+/* إزالة قيود التمرير من الإصلاح السابق */
+.message.received .message-content {
+    overflow: visible !important; /* السماح بظهور المحتوى بالكامل */
+    max-height: none !important; /* إلغاء الحد الأقصى للارتفاع */
+}
+
+/* فقط محافظة على التمرير الأفقي للمحتويات الخاصة */
+.message .code-container,
+.message pre,
+.message table {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+/* 3. تحسين حجم رسالة المستخدم */
+.message.sent .message-content {
+    min-width: 150px !important; /* حد أدنى للعرض */
+    font-size: 0.95rem !important; /* حجم خط أكبر قليلاً */
+    padding: 12px 16px !important; /* مساحة داخلية أكبر */
+}
+
+@media (max-width: 768px) {
+    /* تحسين رسائل المستخدم على الهواتف */
+    .message.sent .message-content {
+        min-width: 120px !important;
+        padding: 10px 14px !important;
+    }
+    
+    /* تحسين رسائل النموذج على الهواتف */
+    .message.received .message-content {
+        padding: 12px 14px !important;
+    }
+    
+    /* زيادة حجم الخط على الهواتف */
+    .message-content {
+        font-size: 0.92rem !important;
+    }
+}
+
+/* 4. إصلاح الأيقونات المضغوطة */
+.message-avatar {
+    margin: 0 8px !important; /* مساحة متساوية حول الأيقونات */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.message.sent .message-avatar {
+    margin-left: 10px !important;
+    margin-right: 5px !important;
+}
+
+.message.received .message-avatar {
+    margin-right: 10px !important;
+    margin-left: 5px !important;
+}
+
+/* تحسين المساحة بين محتوى الرسالة والأفاتار */
+@media (max-width: 768px) {
+    .message.sent .message-avatar {
+        margin-left: 8px !important;
+        margin-right: 3px !important;
+    }
+    
+    .message.received .message-avatar {
+        margin-right: 8px !important;
+        margin-left: 3px !important;
+    }
+}
+
+/* تحسينات للشكل العام للرسائل على الهواتف */
+@media (max-width: 768px) {
+    /* تحسين المساحة الكلية للرسائل */
+    .message {
+        max-width: 80% !important; /* زيادة العرض لتجنب ضغط الرسائل */
+        margin: 6px 0 !important;
+    }
+    
+    /* تحسين لون وشكل فقاعة الرسائل */
+    .message.sent .message-content {
+        background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
+        border-radius: 18px 4px 18px 18px !important;
+    }
+    
+    .message.received .message-content {
+        background: linear-gradient(135deg, #2c3e50 0%, #1c2e40 100%) !important;
+        border-radius: 4px 18px 18px 18px !important;
+    }
+}
+
+/* تحسين دعم RTL */
+html[dir="rtl"] .message.sent .message-avatar {
+    margin-right: 10px !important;
+    margin-left: 5px !important;
+}
+
+html[dir="rtl"] .message.received .message-avatar {
+    margin-left: 10px !important;
+    margin-right: 5px !important;
+}
+
+/* ضمان ظهور نص الرسائل كاملاً */
+.content-container {
+    width: 100% !important;
+    overflow: visible !important; /* ظهور كامل للمحتوى */
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+}
+
+/* تحسين منطقة عرض الرسائل */
+.chat-messages {
+    padding: 1.5rem !important;
+    overflow-x: hidden !important;
+}
+
+@media (max-width: 576px) {
+    .chat-messages {
+        padding: 1rem 0.75rem !important;
+    }
+}
