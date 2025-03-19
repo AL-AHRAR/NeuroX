@@ -429,10 +429,12 @@ body[data-theme="light"] .chat-messages {
 .message {
     display: flex;
     margin: 10px 0;
-    max-width: 90%; /* قيمة افتراضية */
     position: relative;
+    width: auto;
+    max-width: 85%;
 }
 
+/* توجيه الرسائل المرسلة والمستلمة */
 .message.sent {
     margin-right: 0;
     margin-left: auto;
@@ -442,16 +444,152 @@ body[data-theme="light"] .chat-messages {
 .message.received {
     margin-left: 0;
     margin-right: auto;
+    flex-direction: row;
 }
 
+/* تنسيق محتوى الرسائل - محتوى الرسالة نفسها */
 .message-content {
-    max-width: 100%; /* ضمان عدم التجاوز */
-    overflow-wrap: break-word;
-    word-break: break-word;
-    overflow-x: auto; /* السماح بالتمرير الأفقي إذا لزم الأمر */
-    overflow-y: auto; /* السماح بالتمرير العمودي */
     position: relative;
-    box-sizing: border-box; /* ضمان احتساب الحشوة ضمن العرض */
+    overflow: visible; /* تغيير مهم: السماح بظهور المحتوى */
+    max-width: calc(100% - 50px); /* يأخذ بعين الاعتبار حجم الأفاتار */
+    box-sizing: border-box;
+}
+
+/* حاوية المحتوى داخل الرسالة */
+.content-container {
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    max-width: 100% !important;
+}
+
+/* تمرير المحتوى الطويل داخل الرسائل */
+.message .code-container,
+.message pre,
+.message table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* تنسيقات الرسائل المستلمة والمرسلة على الشاشات الكبيرة */
+.message.sent .message-content {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    border-radius: 18px 4px 18px 18px;
+    padding: 12px 15px;
+    color: #ffffff;
+    box-shadow: 0 3px 12px rgba(79, 70, 229, 0.2);
+}
+
+.message.received .message-content {
+    background: linear-gradient(135deg, #2c3e50 0%, #1c2e40 100%);
+    border-radius: 4px 18px 18px 18px;
+    padding: 12px 15px;
+    color: #ffffff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* تنسيقات للأجهزة المحمولة */
+@media (max-width: 768px) {
+    /* تقليل حجم الرسائل على الهواتف */
+    .message {
+        max-width: 80%;
+    }
+    
+    /* تنسيق محدد للرسائل المستلمة على الهواتف */
+    .message.received {
+        margin-right: auto;
+        margin-left: 5px;
+    }
+    
+    /* تنسيق محدد للرسائل المرسلة على الهواتف */
+    .message.sent {
+        margin-left: auto;
+        margin-right: 5px;
+    }
+    
+    /* محتوى الرسائل على الهواتف */
+    .message-content {
+        max-width: calc(100% - 40px); /* يأخذ بعين الاعتبار حجم الأفاتار على الهواتف */
+        font-size: 0.9rem;
+    }
+    
+    /* مساحة داخلية أصغر للرسائل */
+    .message.sent .message-content,
+    .message.received .message-content {
+        padding: 10px 12px;
+    }
+    
+    /* عرض العناصر الداخلية للرسائل */
+    .message .content-container {
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        line-height: 1.4;
+    }
+    
+    /* إصلاح لعرض المحتوى الطويل مثل الكود */
+    .message .code-container {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+    }
+}
+
+/* للشاشات الصغيرة جدًا */
+@media (max-width: 480px) {
+    /* تقليل حجم الرسائل على الشاشات الصغيرة */
+    .message {
+        max-width: 85%;
+    }
+    
+    /* تقليل المساحة الداخلية والخط على الشاشات الصغيرة */
+    .message.sent .message-content,
+    .message.received .message-content {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    
+    /* تصغير حجم الأفاتار للشاشات الصغيرة */
+    .message-avatar {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+    }
+}
+
+/* دعم اللغة العربية (RTL) */
+html[dir="rtl"] .message.sent {
+    margin-left: 0;
+    margin-right: auto;
+    flex-direction: row;
+}
+
+html[dir="rtl"] .message.received {
+    margin-right: 0;
+    margin-left: auto;
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .message.sent .message-content {
+    border-radius: 4px 18px 18px 18px;
+}
+
+html[dir="rtl"] .message.received .message-content {
+    border-radius: 18px 4px 18px 18px;
+}
+
+/* إصلاح لعرض المحتويات المتعددة داخل الرسائل */
+.message img,
+.message video,
+.message iframe,
+.message pre {
+    max-width: 100%;
+    height: auto;
+}
+
+/* إصلاح للجداول في الرسائل */
+.message table {
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
 }
 
 body[data-theme="light"] .message.sent .message-content {
